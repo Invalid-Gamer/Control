@@ -1,14 +1,12 @@
+// Libraries
 #include <Arduino.h> //Arduino Pkg
 #include <Wire.h> // Display
 #include <LiquidCrystal_I2C.h> // Display
 #include <WiFi.h> // Internet
 #include <Preferences.h> // EPROM Mäßige Speicherung von Config (Nicht im Code)
 
-// Preferences: WiFi etc. - konstante Variablen - über Serial überschreibbar, nicht im Code vorhanden
-Preferences prefs;
-String WiFi_SSID, WiFi_Pass; // Captain WiFi
-String Target_IP, Target_Port; // Captain Target
-String Device_Name; // WiFi Module Name
+// Dateiverknüpfungen
+#include <config.h>
 
 // Joystick Config
 const int Btn_Pin = 17; // Button vom Joystick

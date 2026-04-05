@@ -2,10 +2,11 @@
 #define PINS_H
 
 // Pin Belegungen
-extern const int Btn_Pin = 17; // Button vom Joystick
-extern const int Vrx_Pin = 15; // X-Richtung Joystick
-extern const int Vry_Pin = 32; // Y-Richtung Joystick
-extern const int Bzr_Pin = 16; // Buzzer
+const int Btn_Pin = 17; // Button vom Joystick
+const int Vrx_Pin = 15; // X-Richtung Joystick
+const int Vry_Pin = 32; // Y-Richtung Joystick
+const int Bzr_Pin = 16; // Buzzer
+extern bool advancedLog; // Loglevel boolean
 
 // Globale Variablen
 enum OperatingMode { // Global: Was muss angezeigt werden etc.
@@ -24,5 +25,7 @@ extern ControlMode currentCtrlMode;
 
 // Globale Funktionen
 void piep();
+void troubleshoot(void (*callback()), bool doContinue);
+void troubleshoot(bool (*callback()), bool doContinue);
 
 #endif

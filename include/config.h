@@ -2,6 +2,7 @@
 #define CONFIG_H
 
 #include <Arduino.h>
+#include <Preferences.h>
 extern Preferences conf;
 
 extern String WiFi_SSID, WiFi_Pass; // Captain WiFi
@@ -10,5 +11,8 @@ extern int Target_Port; // Captain Target Port
 extern String Device_Name; // WiFi Module Name
 
 bool loadConfig();
+bool writeConfig(String key, String value);
+bool writeConfig(String key, int value);
+bool writeConfig(String key, bool value);
 
 #endif

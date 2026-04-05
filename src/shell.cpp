@@ -3,17 +3,6 @@
 #include <shell.h>
 
 
-void serialHandler() { // Checkt ob shell aktiviert werden soll
-    if(Serial.available() > 0) {
-        String shellInput = Serial.readString();
-        if(shellInput == "shell") {
-            shell();
-        } else {
-            Serial.println("Unknown command: " + shellInput + "Use shell to enter shell!");
-        }
-    }
-}
-
 void shell() { // Die Shell Schleife
     while(true) {
         if(Serial.available() > 0) {
@@ -22,6 +11,17 @@ void shell() { // Die Shell Schleife
             if (teststr == "exit") {
                 break;
             }
+        }
+    }
+}
+
+void serialHandler() { // Checkt ob shell aktiviert werden soll
+    if(Serial.available() > 0) {
+        String shellInput = Serial.readString();
+        if(shellInput == "shell") {
+            shell();
+        } else {
+            Serial.println("Unknown command: " + shellInput + "Use shell to enter shell!");
         }
     }
 }

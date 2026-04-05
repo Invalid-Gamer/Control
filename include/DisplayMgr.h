@@ -6,6 +6,4 @@
 
 void initDisplay();
 
-extern const String menuTitle = "Fernsteuerung";
-
 #endif

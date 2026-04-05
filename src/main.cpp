@@ -7,6 +7,7 @@
 
 // Dateiverknüpfungen
 #include <config.h>
+#include <shell.h>
 
 // Joystick Config
 const int Btn_Pin = 17; // Button vom Joystick

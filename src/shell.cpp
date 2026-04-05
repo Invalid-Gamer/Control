@@ -6,9 +6,10 @@
 void shell() { // Die Shell Schleife
     while(true) {
         if(Serial.available() > 0) {
-            String teststr = Serial.readString();
-            teststr.trim();
-            if (teststr == "exit") {
+            piep();
+            String shellInput = Serial.readString();
+            shellInput.trim();
+            if (shellInput == "exit") {
                 break;
             }
         }
@@ -17,6 +18,7 @@ void shell() { // Die Shell Schleife
 
 void serialHandler() { // Checkt ob shell aktiviert werden soll
     if(Serial.available() > 0) {
+        piep();
         String shellInput = Serial.readString();
         if(shellInput == "shell") {
             shell();

@@ -11,6 +11,9 @@
 #include <global.h>
 #include <DisplayMgr.h>
 
+// Variablen
+bool loadedConfig;
+
 void piep() { // Kurzer Buzzerton (Hier definitert weil zu wenig für eigene Datei)
   digitalWrite(Bzr_Pin, HIGH);
   delay(100);
@@ -18,6 +21,7 @@ void piep() { // Kurzer Buzzerton (Hier definitert weil zu wenig für eigene Dat
 }
 
 void setup() {
+  currentOpMode = SETUP;
   Serial.begin(115200); // Serial Comms (Preferences ändern, debug)
 
   // Pins Setup
@@ -30,7 +34,7 @@ void setup() {
   initDisplay();
 
   // Lade Preferences
-  loadConfig();
+  loadedConfig = loadConfig();
 }
 
 void loop() {

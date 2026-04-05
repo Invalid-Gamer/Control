@@ -20,12 +20,30 @@ void displayTitle() {
     lcd.setCursor(0, 1);
 }
 
+void displayMode() {
+    
+}
+
 void updateDisplay() {
     String text;
     if (currentOpMode == REGULAR) {
         displayTitle();
         switch(currentOpMode) {
-            
+            case SETUP: break;
+            case SHELL: break;
+            case REGULAR:
+                displayTitle();
+                switch(currentCtrlMode) {
+                    case OFF:
+
+                        break;
+                    case MANUAL: break;
+                    case HAUTO: break;
+                    case AUTO:
+                        // Variablen von Auto: Geschwindigkeit? Batterie Sensoren? 
+                        break;
+                }
+                break;
         }
     }
 }

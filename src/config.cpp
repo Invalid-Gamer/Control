@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Preferences.h>
 #include <config.h>
-
+#include <global.h>
 
 bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, weitermachen; false = Fehler, Programm stoppen, debug
     conf.begin("config", true);

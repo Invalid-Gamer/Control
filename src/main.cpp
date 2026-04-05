@@ -8,10 +8,14 @@
 // Dateiverknüpfungen
 #include <config.h>
 #include <shell.h>
-#include <pinBelegungen.h>
+#include <global.h>
+#include <DisplayMgr.h>
 
-// LCD Config
-LiquidCrystal_I2C lcd(0x27, 16, 2); // I2C Addresse, 16x2 Characters Init.
+void piep() { // Kurzer Buzzerton (Hier definitert weil zu wenig für eigene Datei)
+  digitalWrite(Bzr_Pin, HIGH);
+  delay(100);
+  digitalWrite(Bzr_Pin, LOW);
+}
 
 void setup() {
   Serial.begin(115200); // Serial Comms (Preferences ändern, debug)
@@ -20,10 +24,13 @@ void setup() {
   pinMode(Btn_Pin, INPUT);
   pinMode(Vrx_Pin, INPUT);
   pinMode(Vry_Pin, INPUT);
+  pinMode(Bzr_Pin, OUTPUT);
 
   // LCD Setup
-  lcd.init();
-  lcd.backlight();
+  initDisplay();
+
+  // Lade Preferences
+  loadConfig();
 }
 
 void loop() {

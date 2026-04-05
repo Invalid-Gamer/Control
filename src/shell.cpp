@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <config.h>
 #include <shell.h>
-
+#include <global.h>
 
 void shell() { // Die Shell Schleife
     while(true) {

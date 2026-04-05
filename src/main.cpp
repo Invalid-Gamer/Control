@@ -8,11 +8,7 @@
 // Dateiverknüpfungen
 #include <config.h>
 #include <shell.h>
-
-// Joystick Config
-const int Btn_Pin = 17; // Button vom Joystick
-const int Vrx_Pin = 15; // X-Richtung
-const int Vry_Pin = 32; // Y-Richtung
+#include <pinBelegungen.h>
 
 // LCD Config
 LiquidCrystal_I2C lcd(0x27, 16, 2); // I2C Addresse, 16x2 Characters Init.

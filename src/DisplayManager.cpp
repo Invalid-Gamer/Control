@@ -28,6 +28,18 @@ void displayMode(String title) {
     lcd.setCursor(0, 1);
 }
 
+void changeBottomDisplay(String content) {
+    lcd.setCursor(0, 1);
+    if(content.length() < 16) {
+        int add = 16 - content.length();
+        for (int i = 0; i < add ; i++) {
+            content += " ";
+        }
+    }
+    content = content.substring(0, 16);
+    lcd.print(content);
+}
+
 void updateDisplay() {
     if(stayUntil  > millis()||statusDisplaying){
         if(advancedLog){Serial.println("Update Display: Passiv aufgrund showStatus." + String(stayUntil));}
@@ -50,6 +62,8 @@ void updateDisplay() {
                     break;
                 case MANUAL: {
                     displayMode("Manual");
+                    String bottomContent = "B: " + battery + " V:" + velocity;
+                    changeBottomDisplay(bottomContent);
                     break;
                 }
                 case HAUTO: {

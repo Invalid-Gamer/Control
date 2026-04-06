@@ -63,7 +63,7 @@ void setup() {
   Serial.begin(115200); // Serial Comms (Preferences ändern, debug)
   Serial.println("Serial up");
   // Pins Setup
-  pinMode(Btn_Pin, INPUT);
+  pinMode(Btn_Pin, INPUT_PULLUP);
   pinMode(Vrx_Pin, INPUT);
   pinMode(Vry_Pin, INPUT);
   pinMode(Bzr_Pin, OUTPUT);

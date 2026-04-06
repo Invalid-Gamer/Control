@@ -6,7 +6,7 @@ JoystickRaw getRawJoystick() {
     JoystickRaw data;
     data.x = analogRead(Vrx_Pin);
     data.y = analogRead(Vry_Pin);
-    data.btn = digitalRead(Btn_Pin);
+    data.btn = !digitalRead(Btn_Pin);
     return data;
 }
 

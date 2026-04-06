@@ -37,16 +37,16 @@ String getSerialInput(bool timeout) {
 // BASE Shell 
 void handleBaseCommands(String cmd) {
     if (cmd == "help"){
-        Serial.println("Help:\nconfig - Konfigurationsmanagement\nwifi - Gehe in das WiFi Management\ndisplay - Display Management\nsetCtrlMode - Control Mode ändern\nping - Überprüfe die Responsivität der shell\nreload - Startet den ESP neu!\nexit - Verlasse die shell oder ein Unterprogramm");
+        Serial.println("Help:\nconfig - Konfigurationsmanagement\nwifi - Gehe in das WiFi Management\ndisplay - Display Management\nsetCtrlMode - Control Mode ändern\ndebug - Debug tool for Network, Joystick, etc.\nping - Überprüfe die Responsivität der shell\nreload - Startet den ESP neu!\nexit - Verlasse die shell oder ein Unterprogramm");
     } else if(cmd == "config") {
         currentShellMode = CONFIG;
-        Serial.println("Config Shell V0.1.1");
+        Serial.println("Config Shell " + configShellVer);
     } else if (cmd == "wifi") {
         currentShellMode = WIFI;
-        Serial.println("WIFI Shell V0.1");
+        Serial.println("WIFI Shell " + WiFiShellVer);
     } else if(cmd == "display") {
         currentShellMode = SCREEN;
-        Serial.println("Display Shell V0.1");
+        Serial.println("Display Shell "+ displayShellVer);
     } else if (cmd == "setCtrlMode") {
         Serial.println("Control Mode setzen. Auswahl: OFF/MANUAL/HAUTO/AUTO :");
         String set = getSerialInput(true);
@@ -65,6 +65,9 @@ void handleBaseCommands(String cmd) {
             }
             Serial.println("Control Mode erfolgreich auf " + set + " gesetzt.");
         }
+    } else if (cmd == "debug") {
+        currentShellMode = DEBUG;
+        Serial.println("Debug Shell "+ debugShellVer);
     } else if (cmd == "ping") {
         Serial.println("Pong!");
     } else if (cmd == "reload") {
@@ -202,6 +205,35 @@ void handleDisplayCommands(String cmd) {
 }
 
 //---------------------------------
+//--------------DEBUG--------------
+//---------------------------------
+
+//DEBUG Shell
+void handleDebugCommands(String cmd) {
+    if(cmd == "help") {
+        Serial.println("Debug Shell Help:\n---Debug Shell sorgt für logs innerhalb von Aktionen wie Joystick movement, network outgoing und ingoing.---\njoystick - roher Joystick Daten stream\nexit - Kehre zur Standard-Shell zurück");
+    } else if(cmd == "joystick") {
+        Serial.println("Joystick debug starting in 3 seconds! To exit, type cancel!");
+        delay(3000);
+        while(true) {
+            JoystickRaw joystickData = getRawJoystick();
+            Serial.println("x: " + String(joystickData.x) + "; y: " + String(joystickData.y)+ "; Btn: " + String(joystickData.btn));
+            if(Serial.available() > 0) {
+                String input = Serial.readString();
+                input.trim();
+                if (input == "cancel") {
+                    Serial.println("Exiting Joystick debug");
+                    break;
+                }
+            }
+        }
+    } else if(cmd == "exit") {
+        Serial.println("Resuming to normal shell");
+        currentShellMode = BASE;
+    }
+}
+
+//---------------------------------
 //--------------SHELL--------------
 //---------------------------------
 
@@ -215,6 +247,8 @@ void printShellChar() {
         Serial.println("WiFi $ ");
     } else if(currentShellMode == SCREEN) {
         Serial.println("Display $ ");
+    } else if(currentShellMode == DEBUG) {
+        Serial.println("Debug $ ");
     }
 }
 
@@ -223,7 +257,7 @@ void shell() {
     showStatus("In Shell");
     currentOpMode = SHELL;
     currentShellMode = BASE;
-    Serial.println("Shell V0.3");
+    Serial.println("Shell " + baseShellVer);
     piep(2);
     while(currentOpMode == SHELL) {
         printShellChar();
@@ -236,6 +270,8 @@ void shell() {
             handleWiFiCommands(shellInput);
         } else if(currentShellMode == SCREEN) {
             handleDisplayCommands(shellInput);
+        } else if(currentShellMode == DEBUG) {
+            handleDebugCommands(shellInput);
         }
     }
     Serial.println("Shell exited.");

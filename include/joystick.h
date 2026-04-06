@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-const int limit_left = 1500;
+const int limit_left = 1000;
 const int limit_right = 2600;
 
 struct JoystickRaw {

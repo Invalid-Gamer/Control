@@ -3,8 +3,8 @@
 
 // Pin Belegungen
 const int Btn_Pin = 25; // Button vom Joystick
-const int Vrx_Pin = 33; // X-Richtung Joystick
-const int Vry_Pin = 32; // Y-Richtung Joystick
+const int Vrx_Pin = 32; // X-Richtung Joystick (getauscht damit kabelführung klappt)
+const int Vry_Pin = 33; // Y-Richtung Joystick (getauscht damit kabelführung klappt)
 const int Bzr_Pin = 16; // Buzzer
 extern bool advancedLog; // Loglevel boolean
 

@@ -62,16 +62,20 @@ void updateDisplay() {
                     break;
                 case MANUAL: {
                     displayMode("Manual");
-                    String bottomContent = "B: " + battery + " V:" + velocity;
+                    String bottomContent = "B:  V:";
                     changeBottomDisplay(bottomContent);
                     break;
                 }
                 case HAUTO: {
                     displayMode("Halb-Auto");
+                    String bottomContent = "B:  V:";
+                    changeBottomDisplay(bottomContent);
                     break;
                 }
                 case AUTO: {
                     displayMode("Automatik"); 
+                    String bottomContent = "B:  V:";
+                    changeBottomDisplay(bottomContent);
                     break;
                 }
             }

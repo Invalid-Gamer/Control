@@ -4,6 +4,14 @@
 #include <DisplayMgr.h>
 #include <config.h>
 #include <communication.h>
+#include <WiFiUdp.h>
+#include <joystick.h>
+
+WiFiUDP udp;
+WiFiClient tcp;
+
+unsigned long lastUdp = 0;
+int lastMode = -1;
 
 bool setupWiFi() {
     showStatus("Verbinde WLAN... ");
@@ -44,5 +52,26 @@ String getWiFiStatus() {
         case WL_IDLE_STATUS:     return "Leerlauf (WL_IDLE_STATUS)";
         case WL_DISCONNECTED:    return "Getrennt (WL_DISCONNECTED)";
         default:                 return "Unbekannter Status (" + String(WiFi.status()) + ")";
+    }
+}
+
+void connectTCP() {
+}
+void sendMovementData(JoystickRaw raw, int currentMode) {
+    ControlPacket packet = {(uint16_t)raw.x, (uint16_t)raw.y, (uint8_t)currentMode };
+    udp.beginPacket(Target_IP.c_str(), udp_Target_Port);
+    udp.write((uint8_t*)&packet, sizeof(packet));
+    udp.endPacket();
+}
+
+void communicator(JoystickRaw jStick) {
+    int currentMode = (int)currentCtrlMode;
+    if (millis() - lastUdp > 20) {
+        sendMovementData(jStick, currentMode);
+        lastUdp = millis();
+    }
+
+    if(currentMode != lastMode) {
+        lastMode = currentMode;
     }
 }

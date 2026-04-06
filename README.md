@@ -3,7 +3,7 @@ Work in Progress
 
 * ToDo: 
     * config.cpp: (loadConfig) Troubleshoot und Debug fertig machen
-    * config Tabelle erstellen command: erster shell command!
+    * communication tcp, handler, generell communication
 
 * Dokumentation:
     * Projektaufbau:

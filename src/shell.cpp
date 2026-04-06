@@ -92,8 +92,8 @@ void handleBaseCommands(String cmd) {
 //--------------CONFIG--------------
 //----------------------------------
 
-// CONFIG Write
-void shellWriteConf() {
+// CONFIG Write/ADD
+void shellWriteConf(bool ignoreExistance) {
     Serial.println("Enter config key to Write to: ");
     String key = getSerialInput(true);
     if(key != "ABORTCMD") {
@@ -103,36 +103,80 @@ void shellWriteConf() {
             Serial.println("Enter String: ");
             String value = getSerialInput(true);
             if(value != "ABORTCMD"){
-                writeConfig(key, value);
+                writeConfig(key, value, ignoreExistance);
             }
         } else if(dtype == "int") {
             Serial.println("Enter int: ");
             String value = getSerialInput(true);
             if(value != "ABORTCMD") {
-                writeConfig(key, (int)value.toInt());
+                writeConfig(key, (int)value.toInt(), ignoreExistance);
             }
         } else if(dtype == "bool") {
             Serial.println("Enter ONLY 1/0:");
             String value = getSerialInput(true);
             if(value != "ABORTCMD") {
-                writeConfig(key, (bool)value.toInt());
+                writeConfig(key, (bool)value.toInt(), ignoreExistance);
             }
         } else {
             Serial.println("Unknown type. Stopping command execution!");
         }
     }
 }
+
+// Config Remove/DELETE
+void shellRemoveConf(bool entireDelete) {
+    if(entireDelete){
+        Serial.println("Enter config key to remove ENTIRELY: ");
+    } else {
+        Serial.println("Enter config key to remove contents: ");
+    }
+    String key = getSerialInput(true);
+    if(key != "ABORTCMD") {
+        if(entireDelete) {
+            Serial.println("Confirm deletion - This CANT BE UNDONE! CODE UNUSABLE (y/n): ");
+            String antwort = getSerialInput(true);
+            if(antwort == "y") {
+                bool happened = deleteConfig(key, true);
+                if(happened) {
+                    Serial.println("Config Entry " + key + " Deleted. Carefull now.");
+                }
+            } else {
+                Serial.println("Aborting...");
+                return;
+            }
+        } else {
+            Serial.println("Enter datatype of config entry (String/int):");
+            String dtype = getSerialInput(true);
+            if (dtype == "String") {
+                writeConfig(key, "", false);
+            } else if(dtype == "int") {
+                writeConfig(key, 0, false);
+            } else if (dtype == "ABORTCMD") {
+                return;
+            } else {
+                Serial.println("Unknown type. Stopping command execution!");
+            }
+        }
+    }
+}
+
 // CONFIG Shell
 void handleConfigCommands(String cmd) {
     if(cmd == "help") {
-        Serial.println("Config Shell Help:\nload - lädt den Config aus dem Speicher erneut in die Variablen\nshow - Zeigt aktuelle config Tabelle\nwrite - Schreibe in einen existierenden Config Eintrag\nexit - Kehre zur Standard-Shell zurück");
+        Serial.println("Config Shell Help:\nload - lädt den Config aus dem Speicher erneut in die Variablen\nshow - Zeigt aktuelle config Tabelle\nwrite - Schreibe in einen existierenden Config Eintrag (+ SECURE_OFF um Werte neu hinzuzufügen)\nremove - löscht Eintrag aus Config (+ SECURE_OFF um Keys zu entfernen ACHTUNG - CODE WIRD ZERSTÖRT)\nexit - Kehre zur Standard-Shell zurück");
     } else if (cmd == "load") {
         bool Ergebnis = loadConfig();
         if(Ergebnis){Serial.println("Config loaded successfully");} else {Serial.println("Config didn't load successfully");}
     } else if (cmd == "show") {
         outputConfigToSerial();
     } else if(cmd == "write") {
-        shellWriteConf();
+        shellWriteConf(false);
+    } else if(cmd == "write SECURE_OFF") {
+        shellWriteConf(true);
+    } else if(cmd == "remove") {
+        shellRemoveConf(false);
+    } else if(cmd =="remove SECURE_OFF") {
+        shellRemoveConf(true);
     } else if (cmd == "exit") {
         Serial.println("Resuming to normal shell");
         currentShellMode = BASE;

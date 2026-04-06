@@ -46,10 +46,14 @@ void troubleshoot(bool (*callback)(), bool doContinue) {
   }
 }
 
-void piep() { // Kurzer Buzzerton (Hier definitert weil zu wenig für eigene Datei)
-  digitalWrite(Bzr_Pin, HIGH);
-  delay(100);
-  digitalWrite(Bzr_Pin, LOW);
+void piep(int amount) { // Kurzer Buzzerton (Hier definitert weil zu wenig für eigene Datei)
+  if(advancedLog){Serial.println("Piepe für "+ String(amount) + " male");}
+  for (int i = 0; i<amount; i++) { // Mehrmals buzzern?
+    digitalWrite(Bzr_Pin, HIGH);
+    delay(100);
+    digitalWrite(Bzr_Pin, LOW);
+    delay(100);
+  }
 }
 
 void setup() {
@@ -64,13 +68,14 @@ void setup() {
   // LCD Setup
   initDisplay();
   // Lade Preferences
-  Serial.println("Loading config");
+  if(advancedLog){Serial.println("Loading config");}
   loadedConfig = loadConfig();
   if(!loadedConfig) {troubleshoot(loadConfig, false);}
   WiFiConnected = setupWiFi();
   if(!WiFiConnected){troubleshoot(setupWiFi, false);}
+  Serial.println("Setup finished!");
 }
 
 void loop() {
-  
+  serialHandler();
 }

@@ -5,4 +5,11 @@
 void shell();
 void serialHandler();
 
+enum ShellMode {
+    BASE,
+    CONFIG,
+    WIFI
+};
+extern ShellMode currentShellMode;
+
 #endif 

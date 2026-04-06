@@ -11,6 +11,7 @@ extern int Target_Port; // Captain Target Port
 extern String Device_Name; // WiFi Module Name
 
 bool loadConfig();
+void outputConfigToSerial();
 bool writeConfig(String key, String value);
 bool writeConfig(String key, int value);
 bool writeConfig(String key, bool value);

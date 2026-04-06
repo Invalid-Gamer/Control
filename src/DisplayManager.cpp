@@ -3,7 +3,7 @@
 #include <global.h>
 #include <DisplayMgr.h>
 
-const String menuTitle = "Fernsteuerung";
+const String mainMenuTitle = "Fernsteuerung";
 
 // LCD Config
 LiquidCrystal_I2C lcd(0x27, 16, 2); // I2C Addresse, 16x2 Characters Init.
@@ -16,7 +16,7 @@ void initDisplay() {
 
 void displayTitle() {
     lcd.setCursor(0, 0);
-    lcd.print(menuTitle);
+    lcd.print(mainMenuTitle);
     lcd.setCursor(0, 1);
 }
 

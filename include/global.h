@@ -24,7 +24,7 @@ extern OperatingMode currentOpMode;
 extern ControlMode currentCtrlMode;
 
 // Globale Funktionen
-void piep();
+void piep(int amount);
 void troubleshoot(void (*callback()), bool doContinue);
 void troubleshoot(bool (*callback()), bool doContinue);
 

@@ -4,6 +4,7 @@
 #include <global.h>
 #include <communication.h>
 #include <DisplayMgr.h>
+#include <joystick.h>
 
 ShellMode currentShellMode;
 

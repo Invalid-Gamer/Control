@@ -11,6 +11,7 @@
 #include <global.h>
 #include <DisplayMgr.h>
 #include <communication.h>
+#include <joystick.h>
 
 OperatingMode currentOpMode;
 ControlMode currentCtrlMode;

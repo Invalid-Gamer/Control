@@ -13,6 +13,7 @@
 #include <communication.h>
 
 OperatingMode currentOpMode;
+ControlMode currentCtrlMode;
 
 // Variablen
 bool loadedConfig;
@@ -74,8 +75,12 @@ void setup() {
   WiFiConnected = setupWiFi();
   if(!WiFiConnected){troubleshoot(setupWiFi, false);}
   Serial.println("Setup finished!");
+  showStatus("Setup finished");
+  removeStatus(1);
+  currentOpMode = REGULAR;
 }
 
 void loop() {
   serialHandler();
+  updateDisplay();
 }

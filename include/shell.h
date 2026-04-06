@@ -8,7 +8,8 @@ void serialHandler();
 enum ShellMode {
     BASE,
     CONFIG,
-    WIFI
+    WIFI,
+    SCREEN
 };
 extern ShellMode currentShellMode;
 

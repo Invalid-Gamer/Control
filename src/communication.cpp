@@ -6,9 +6,9 @@
 #include <communication.h>
 
 bool setupWiFi() {
-    // Display: Verbinde WLAN
+    showStatus("Verbinde WLAN... ");
     WiFi.setHostname(Device_Name.c_str());
-    if (advancedLog){Serial.println("WiFi: Using Credentials: "); Serial.println("SSID:" + WiFi_SSID + "; Pass: " + WiFi_Pass + "Current Hostname: " + String(WiFi.getHostname()));}
+    if (advancedLog){Serial.println("WiFi: Using Credentials: "); Serial.println("SSID:" + WiFi_SSID + "; Pass: " + WiFi_Pass + "; Current Hostname: " + String(WiFi.getHostname()));}
     WiFi.begin(WiFi_SSID.c_str(),WiFi_Pass.c_str());
     unsigned long start = millis();
     if(advancedLog){Serial.println("Waiting for connection at: " + String(start));}
@@ -20,6 +20,8 @@ bool setupWiFi() {
         }
     }
     if(advancedLog){Serial.println("WiFi successfully connected after: " + String(millis() - start));}
+    showStatus("WiFi connected");
+    removeStatus(1);
     return true;
 }
 

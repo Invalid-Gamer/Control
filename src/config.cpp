@@ -2,6 +2,7 @@
 #include <Preferences.h>
 #include <config.h>
 #include <global.h>
+#include <joystick.h>
 
 Preferences conf;
 String WiFi_SSID = "";
@@ -11,6 +12,7 @@ int udp_Target_Port = 0;
 int tcp_Target_Port = 0;
 String Device_Name = "";
 bool advancedLog = false;
+int menuWaitingDelay = 0;
 
 void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle Konsole
     conf.begin("config", true);
@@ -21,6 +23,7 @@ void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle 
     Serial.println("tcp_target_port: " + String(conf.getInt("tcp_target_port", 0)));
     Serial.println("device_name: " + conf.getString("device_name", ""));
     Serial.println("advancedLog: " + String(conf.getBool("advancedLog", false)));
+    Serial.println("menu_delay: " + String(conf.getInt("menu_delay", 0)));
     conf.end();
 }
 
@@ -34,6 +37,7 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
     tcp_Target_Port = conf.getInt("tcp_target_port", 0);
     Device_Name = conf.getString("device_name", "");
     advancedLog = conf.getBool("advancedLog", false);
+    menuWaitingDelay = conf.getInt("menu_delay", 0);
     conf.end();
     if(advancedLog){Serial.println("Loaded config. Current config: "); outputConfigToSerial();}
     if (WiFi_SSID == "" || WiFi_Pass == "") {
@@ -44,10 +48,15 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
         // Debug, Warnen dass kein Target vorhanden, Programm stoppen, auf Display anzeigen.
         if(advancedLog){Serial.println("Target IP/Port nicht vorhanden!");}
         return false;
-    } else if (Device_Name == "") {
+    } else if (Device_Name == "" || menuWaitingDelay == 0) {
         // Auf Display warnen, fortfahren mit Standard-Namen
-        if(advancedLog){Serial.println("Kein Device Name vorhanden! (Oder leer)");}
-        Device_Name = "Natasha Control";
+        if(Device_Name == "") {
+            Device_Name = "Natasha Control";
+            if(advancedLog){Serial.println("Kein Device Name vorhanden! (Oder leer) Benutze Standard (Natasha Control)");}
+        } else if(menuWaitingDelay == 0) {
+            menuWaitingDelay = 25;
+            if(advancedLog){Serial.println("Kein Menu Waiting Delay Wert festgelegt! Benutze Standard von 25...");}
+        }
         return true;
     } else {
         return true;

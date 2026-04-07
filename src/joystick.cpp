@@ -2,6 +2,7 @@
 #include <global.h>
 #include <joystick.h>
 #include <communication.h>
+#include <config.h>
 
 JoystickRaw getRawJoystick() {
     JoystickRaw data;
@@ -21,7 +22,7 @@ void joyStickMenu() {
             case AUTO: currentMenuOption = INFO; break;
         }
         piep(1);
-        delay(500);
+        delay(menuWaitingDelay);
         if(advancedLog){Serial.println("Menu right (Now selected: " + String(currentMenuOption) + ")");}
     } else if(currentPos.x < limit_left) {
         switch(currentMenuOption) {
@@ -31,7 +32,7 @@ void joyStickMenu() {
             case MANUAL: currentMenuOption = INFO; break;
         }
         piep(1);
-        delay(500);
+        delay(menuWaitingDelay);
         if(advancedLog){Serial.println("Menu left (Now selected: " + String(currentMenuOption) + ")");}
     } else if (currentPos.btn) {
         piep(2);
@@ -53,11 +54,11 @@ void joyStickMode() {
     if(currentCtrlMode == AUTO || currentCtrlMode == INFO) {
         if(currentPos.x > limit_right) {
             piep(1);
-            delay(500);
+            delay(menuWaitingDelay);
             if(advancedLog){Serial.println("Mode left");}
         } else if(currentPos.x > limit_left) {
             piep(1);
-            delay(500);
+            delay(menuWaitingDelay);
             if(advancedLog){Serial.println("Mode right");}
         }
     }

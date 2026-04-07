@@ -10,6 +10,7 @@ extern String Target_IP; // Captain Target IP
 extern int udp_Target_Port; // Captain UDP Target Port
 extern int tcp_Target_Port; // Captain TCP Target Port
 extern String Device_Name; // WiFi Module Name
+extern int menuWaitingDelay;
 
 bool loadConfig();
 void outputConfigToSerial();

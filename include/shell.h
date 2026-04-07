@@ -4,7 +4,7 @@
 
 const String baseShellVer = "V1.0";
 const String configShellVer = "V0.4";
-const String WiFiShellVer = "V0.1";
+const String WiFiShellVer = "V0.2";
 const String displayShellVer = "V0.1.1";
 const String debugShellVer = "V0.1";
 

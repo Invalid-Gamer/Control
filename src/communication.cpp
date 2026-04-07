@@ -78,6 +78,11 @@ void checkTCP() {
     if(!tcp.connected()) {
         connectTCP();
     }
+    if(!tcp.connected()) {
+        currentCtrlMode = OFF;
+        showStatus("TCP Disconnected");
+        removeStatus(5);
+    }
 }
 
 void sendTCP(String type, String value) {
@@ -108,7 +113,6 @@ void handleIncomingTCP() {
     while(tcp.available()) {
         String line = tcp.readStringUntil('\n');
         line.trim();
-
         if(line.startsWith("BATT:")) {
             battValue = line.substring(5).toFloat();
             if(advancedLog){Serial.println("Empfangen BATT: " + String(battValue));}

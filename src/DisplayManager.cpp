@@ -24,6 +24,12 @@ void displayTitle() {
 
 void displayMode(String title) {
     lcd.setCursor(0, 0);
+    if(title.length() < 16) {
+        int add = 15 - title.length();
+        for (int i = 0; i < add; i++) {
+            title += " ";
+        }
+    }
     lcd.print(title);
     lcd.setCursor(0, 1);
 }
@@ -79,19 +85,19 @@ void updateDisplay() {
                     break;
                 case MANUAL: {
                     displayMode("Manual");
-                    String bottomContent = "B: " + String(battValue) + "V:" + String(velValue);
+                    String bottomContent = "Bat: " + String(battValue) + " V:" + String(velValue);
                     changeBottomDisplay(bottomContent);
                     break;
                 }
                 case HAUTO: {
                     displayMode("Halb-Auto");
-                    String bottomContent = "B: " + String(battValue) + "V:" + String(velValue);
+                    String bottomContent = "Bat: " + String(battValue) + " V:" + String(velValue);
                     changeBottomDisplay(bottomContent);
                     break;
                 }
                 case AUTO: {
                     displayMode("Automatik"); 
-                    String bottomContent = "B: " + String(battValue) + "V:" + String(velValue);
+                    String bottomContent = "Bat: " + String(battValue) + "V:" + String(velValue);
                     changeBottomDisplay(bottomContent);
                     break;
                 }

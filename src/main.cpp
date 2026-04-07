@@ -40,12 +40,14 @@ void troubleshoot(bool (*callback)(), bool doContinue) {
   Serial.println("Starte Callback mit Loglevel debug... ");
   delay(1000);
   advancedLog = true;
-  callback();
+  bool successed = callback();
   advancedLog = false;
-  if(!doContinue) {
+  if(!doContinue && !successed) {
     Serial.println("Can't continue, launching shell!");
     delay(500);
     shell();
+  } else if(successed) {
+    Serial.println("Second run accomplished. Resuming");
   }
 }
 
@@ -89,4 +91,8 @@ void loop() {
     joyStickMode();
   }
   updateDisplay();
+  if(currentCtrlMode == MANUAL || currentCtrlMode == HAUTO) {
+    JoystickRaw joyStickPos = getRawJoystick();
+    sendMovementData(joyStickPos, (int)currentCtrlMode);
+  }
 }

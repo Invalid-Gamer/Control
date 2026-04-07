@@ -2,6 +2,7 @@
 #define COMMUNICATION_H
 
 #include <Arduino.h>
+#include <joystick.h>
 extern unsigned long lastUdp;
 
 struct ControlPacket {// Für wie die Datensätze aufgebaut sein sollten habe ich KI benutzt.
@@ -13,6 +14,7 @@ struct ControlPacket {// Für wie die Datensätze aufgebaut sein sollten habe ic
 bool setupWiFi();
 void disconnectWiFi();
 void updateTCP();
-String getWiFiStatus();;
+String getWiFiStatus();
+void sendMovementData(JoystickRaw raw, int currentMode);
 
 #endif

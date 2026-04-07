@@ -64,6 +64,10 @@ void connectTCP() {
         if(millis() - start > 5000) {
             Serial.println("TCP Verbingung hakt!");
         }
+        if(millis() - start > 10000) {
+            Serial.println("TCP Verbindungsaufbau nicht möglich! Abbruch...");
+            return;
+        }
     }
 }
 

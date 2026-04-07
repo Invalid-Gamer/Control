@@ -56,7 +56,7 @@ void joyStickMode() {
             piep(1);
             delay(menuWaitingDelay);
             if(advancedLog){Serial.println("Mode left");}
-        } else if(currentPos.x > limit_left) {
+        } else if(currentPos.x < limit_left) {
             piep(1);
             delay(menuWaitingDelay);
             if(advancedLog){Serial.println("Mode right");}

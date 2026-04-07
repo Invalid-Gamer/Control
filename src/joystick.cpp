@@ -20,6 +20,8 @@ void joyStickMenu() {
             case HAUTO: currentMenuOption = AUTO; break;
             case AUTO: currentMenuOption = INFO; break;
         }
+        piep(1);
+        delay(500);
         if(advancedLog){Serial.println("Menu right (Now selected: " + String(currentMenuOption) + ")");}
     } else if(currentPos.x < limit_left) {
         switch(currentMenuOption) {
@@ -28,8 +30,11 @@ void joyStickMenu() {
             case HAUTO: currentMenuOption = MANUAL; break;
             case MANUAL: currentMenuOption = INFO; break;
         }
+        piep(1);
+        delay(500);
         if(advancedLog){Serial.println("Menu left (Now selected: " + String(currentMenuOption) + ")");}
     } else if (currentPos.btn) {
+        piep(2);
         currentCtrlMode = currentMenuOption;
         updateTCP();
         if(advancedLog){Serial.println("Button pressed (Selected Mode: " + String(currentCtrlMode) + ")");}
@@ -41,13 +46,18 @@ void joyStickMode() {
     if(currentPos.btn) {
         currentMenuOption = currentCtrlMode;
         if(advancedLog){Serial.println("Button pressed (Exited Mode: " + String(currentCtrlMode) + ")");}
+        piep(2);
         currentCtrlMode = OFF;
         updateTCP();
     }
     if(currentCtrlMode == AUTO || currentCtrlMode == INFO) {
         if(currentPos.x > limit_right) {
+            piep(1);
+            delay(500);
             if(advancedLog){Serial.println("Mode left");}
         } else if(currentPos.x > limit_left) {
+            piep(1);
+            delay(500);
             if(advancedLog){Serial.println("Mode right");}
         }
     }

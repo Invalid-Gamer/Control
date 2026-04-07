@@ -56,7 +56,39 @@ String getWiFiStatus() {
 }
 
 void connectTCP() {
+    if(advancedLog){Serial.println("Baue TCP Verbindung auf");}
+    tcp.connect(Target_IP.c_str(), tcp_Target_Port);
+    unsigned long start = millis();
+    while(!tcp.connected()) {
+        delay(10);
+        if(millis() - start > 5000) {
+            Serial.println("TCP Verbingung hakt!");
+        }
+    }
 }
+
+void checkTCP() {
+    if(!tcp.connected()) {
+        connectTCP();
+    }
+}
+
+void sendTCP(String type, String value) {
+    checkTCP();
+    tcp.println(type + ":" + value);
+    if(advancedLog){Serial.println("Sende TCP. type: " + type + "; value: " + value);}
+}
+
+void sendTCP(String type, int value) {
+    checkTCP();
+    tcp.println(type + ":" + value);
+    if(advancedLog){Serial.println("Sende TCP. type: " + type + "; value: " + value);}
+}
+
+void updateTCP() {
+    sendTCP("mode",currentCtrlMode);
+}
+
 void sendMovementData(JoystickRaw raw, int currentMode) {
     ControlPacket packet = {(uint16_t)raw.x, (uint16_t)raw.y, (uint8_t)currentMode };
     udp.beginPacket(Target_IP.c_str(), udp_Target_Port);

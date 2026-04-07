@@ -12,6 +12,7 @@ struct ControlPacket {// Für wie die Datensätze aufgebaut sein sollten habe ic
 
 bool setupWiFi();
 void disconnectWiFi();
+void updateTCP();
 String getWiFiStatus();;
 
 #endif

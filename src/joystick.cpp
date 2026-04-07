@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <global.h>
 #include <joystick.h>
+#include <communication.h>
 
 JoystickRaw getRawJoystick() {
     JoystickRaw data;
@@ -30,6 +31,7 @@ void joyStickMenu() {
         if(advancedLog){Serial.println("Menu left (Now selected: " + String(currentMenuOption) + ")");}
     } else if (currentPos.btn) {
         currentCtrlMode = currentMenuOption;
+        updateTCP();
         if(advancedLog){Serial.println("Button pressed (Selected Mode: " + String(currentCtrlMode) + ")");}
     }
 }
@@ -40,6 +42,7 @@ void joyStickMode() {
         currentMenuOption = currentCtrlMode;
         if(advancedLog){Serial.println("Button pressed (Exited Mode: " + String(currentCtrlMode) + ")");}
         currentCtrlMode = OFF;
+        updateTCP();
     }
     if(currentCtrlMode == AUTO || currentCtrlMode == INFO) {
         if(currentPos.x > limit_right) {

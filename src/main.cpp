@@ -89,6 +89,7 @@ void loop() {
     joyStickMenu();
   } else {
     joyStickMode();
+    handleIncomingTCP();
   }
   updateDisplay();
   if(currentCtrlMode == MANUAL || currentCtrlMode == HAUTO) {

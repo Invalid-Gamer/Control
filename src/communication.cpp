@@ -12,6 +12,9 @@ WiFiClient tcp;
 
 unsigned long lastUdp = 0;
 int lastMode = -1;
+float battValue = 0;
+int velValue = 0;
+
 
 bool setupWiFi() {
     showStatus("Verbinde WLAN... ");
@@ -100,14 +103,18 @@ void sendMovementData(JoystickRaw raw, int currentMode) {
     udp.endPacket();
 }
 
-void communicator(JoystickRaw jStick) {
-    int currentMode = (int)currentCtrlMode;
-    if (millis() - lastUdp > 20) {
-        sendMovementData(jStick, currentMode);
-        lastUdp = millis();
-    }
+void handleIncomingTCP() {
+    checkTCP();
+    while(tcp.available()) {
+        String line = tcp.readStringUntil('\n');
+        line.trim();
 
-    if(currentMode != lastMode) {
-        lastMode = currentMode;
+        if(line.startsWith("BATT:")) {
+            battValue = line.substring(5).toFloat();
+            if(advancedLog){Serial.println("Empfangen BATT: " + String(battValue));}
+        } else if (line.startsWith("VEL:")) {
+            velValue = line.substring(4).toInt();
+            if(advancedLog) Serial.println("Empfangen VEL: " + String(velValue));
+        }
     }
 }

@@ -7,6 +7,8 @@ const int Vrx_Pin = 32; // X-Richtung Joystick (getauscht damit kabelführung kl
 const int Vry_Pin = 33; // Y-Richtung Joystick (getauscht damit kabelführung klappt)
 const int Bzr_Pin = 16; // Buzzer
 extern bool advancedLog; // Loglevel boolean
+extern float battValue;
+extern int velValue;
 
 // Globale Variablen
 enum OperatingMode { // Global: Was muss angezeigt werden etc.

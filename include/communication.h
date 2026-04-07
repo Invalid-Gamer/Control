@@ -16,5 +16,6 @@ void disconnectWiFi();
 void updateTCP();
 String getWiFiStatus();
 void sendMovementData(JoystickRaw raw, int currentMode);
+void handleIncomingTCP();
 
 #endif

@@ -21,7 +21,7 @@ void joyStickMenu() {
             case AUTO: currentMenuOption = INFO; break;
         }
         if(advancedLog){Serial.println("Menu right (Now selected: " + String(currentMenuOption) + ")");}
-    } else if(currentPos.y < limit_left) {
+    } else if(currentPos.x < limit_left) {
         switch(currentMenuOption) {
             case INFO: currentMenuOption = AUTO; break;
             case AUTO: currentMenuOption = HAUTO; break;

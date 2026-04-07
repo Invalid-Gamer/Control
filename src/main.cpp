@@ -15,6 +15,7 @@
 
 OperatingMode currentOpMode;
 ControlMode currentCtrlMode;
+ControlMode currentMenuOption;
 
 // Variablen
 bool loadedConfig;
@@ -49,7 +50,6 @@ void troubleshoot(bool (*callback)(), bool doContinue) {
 }
 
 void piep(int amount) { // Kurzer Buzzerton (Hier definitert weil zu wenig für eigene Datei)
-  if(advancedLog){Serial.println("Piepe für "+ String(amount) + " male");}
   for (int i = 0; i<amount; i++) { // Mehrmals buzzern?
     digitalWrite(Bzr_Pin, HIGH);
     delay(100);
@@ -83,5 +83,10 @@ void setup() {
 
 void loop() {
   serialHandler();
+  if(currentCtrlMode == OFF) {
+    joyStickMenu();
+  } else {
+    joyStickMode();
+  }
   updateDisplay();
 }

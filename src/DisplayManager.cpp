@@ -59,6 +59,23 @@ void updateDisplay() {
             switch(currentCtrlMode) {
                 case OFF:
                     displayTitle();
+                    switch(currentMenuOption) {
+                        case OFF:
+                            changeBottomDisplay("");
+                            break;
+                        case MANUAL:
+                            changeBottomDisplay("Manual");
+                            break;
+                        case HAUTO:
+                            changeBottomDisplay("Halb-Auto");
+                            break;
+                        case AUTO:
+                            changeBottomDisplay("Automatik");
+                            break;
+                        case INFO:
+                            changeBottomDisplay("Informationen");
+                            break;
+                    }
                     break;
                 case MANUAL: {
                     displayMode("Manual");
@@ -74,6 +91,12 @@ void updateDisplay() {
                 }
                 case AUTO: {
                     displayMode("Automatik"); 
+                    String bottomContent = "B:  V:";
+                    changeBottomDisplay(bottomContent);
+                    break;
+                }
+                case INFO: {
+                    displayMode("Informationen");
                     String bottomContent = "B:  V:";
                     changeBottomDisplay(bottomContent);
                     break;

@@ -13,5 +13,7 @@ struct JoystickRaw {
 };
 
 JoystickRaw getRawJoystick();
+void joyStickMenu();
+void joyStickMode();
 
 #endif

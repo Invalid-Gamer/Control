@@ -192,7 +192,7 @@ void handleConfigCommands(String cmd) {
 // WIFI Shell
 void handleWiFiCommands(String cmd) {
     if(cmd == "help") {
-        Serial.println("WiFi Shell Help:\n--Um WiFi Credentials zu ändern, gehe in die Config Shell!--\nstatus - WiFi Status\nconnect - Mit WLAN Verbinden\ndisconnect - Verbindung trennen\nexit - Kehre zur Standard-Shell zurück");
+        Serial.println("WiFi Shell Help:\n--Um WiFi Credentials zu ändern, gehe in die Config Shell!--\nstatus - WiFi Status\nconnect - Mit WLAN Verbinden\ndisconnect - Verbindung trennen\ngetMacAddr - Gibt die Mac Addresse wieder\nexit - Kehre zur Standard-Shell zurück");
     } else if(cmd == "status") {
         Serial.println(getWiFiStatus());
     } else if(cmd == "connect") {
@@ -205,6 +205,8 @@ void handleWiFiCommands(String cmd) {
     } else if(cmd == "disconnect") {
         disconnectWiFi();
         Serial.println("WLAN Verbindung getrennt.");
+    } else if(cmd == "getMacAddr") {
+        Serial.println(getMacAddress());
     } else if(cmd == "exit") {
         Serial.println("Resuming to normal shell");
         currentShellMode = BASE;

@@ -64,10 +64,10 @@ void connectTCP() {
     unsigned long start = millis();
     while(!tcp.connected()) {
         delay(10);
-        if(millis() - start > 5000) {
+        if(millis() - start > 2000) {
             Serial.println("TCP Verbingung hakt!");
         }
-        if(millis() - start > 10000) {
+        if(millis() - start > 5000) {
             Serial.println("TCP Verbindungsaufbau nicht möglich! Abbruch...");
             return;
         }

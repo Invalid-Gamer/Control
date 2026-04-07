@@ -2,8 +2,8 @@
 #define SHELL_H
 #include <Arduino.h>
 
-const String baseShellVer = "V0.5";
-const String configShellVer = "V0.3";
+const String baseShellVer = "V1.0";
+const String configShellVer = "V0.4";
 const String WiFiShellVer = "V0.1";
 const String displayShellVer = "V0.1.1";
 const String debugShellVer = "V0.1";

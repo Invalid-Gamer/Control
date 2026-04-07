@@ -15,6 +15,7 @@ bool setupWiFi();
 void disconnectWiFi();
 void updateTCP();
 String getWiFiStatus();
+String getMacAddress();
 void sendMovementData(JoystickRaw raw, int currentMode);
 void handleIncomingTCP();
 

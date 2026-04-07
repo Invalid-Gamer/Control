@@ -48,6 +48,7 @@ String getWiFiStatus() {
         info += "\n IP: " + WiFi.localIP().toString();
         info += "\n Signal: " + String(WiFi.RSSI()) + "dBm";
         info += "\n Hostname: " + String(WiFi.getHostname());
+        info += "\n Mac Address: " + String(WiFi.macAddress());
         return info;
         }
         case WL_NO_SSID_AVAIL:   return "SSID nicht gefunden (WL_NO_SSID_AVAIL)";
@@ -56,6 +57,10 @@ String getWiFiStatus() {
         case WL_DISCONNECTED:    return "Getrennt (WL_DISCONNECTED)";
         default:                 return "Unbekannter Status (" + String(WiFi.status()) + ")";
     }
+}
+
+String getMacAddress() {
+    return ("Mac Address: " + String(WiFi.macAddress()));
 }
 
 void connectTCP() {

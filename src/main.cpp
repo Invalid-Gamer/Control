@@ -15,7 +15,7 @@
 
 OperatingMode currentOpMode;
 ControlMode currentCtrlMode;
-ControlMode currentMenuOption;
+ControlMode currentMenuOption = MANUAL;
 
 // Variablen
 bool loadedConfig;

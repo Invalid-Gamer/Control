@@ -84,7 +84,7 @@ def sender_thread():
         if active_tcp_conn:
             try:
                 # Testdaten generieren
-                batt = round(random.uniform(11.0, 12.6), 2)
+                batt = round(random.uniform(3.0, 6.0), 2)
                 vel = random.randint(0, 50)
                 
                 # Format: "BATT:12.45\n" und "VEL:30\n"
@@ -94,7 +94,7 @@ def sender_thread():
                 active_tcp_conn.sendall(msg_batt.encode())
                 active_tcp_conn.sendall(msg_vel.encode())
                 
-                data_display["tcp_last_msg_sent"] = f"B:{batt}V, V:{vel}"
+                data_display["tcp_last_msg_sent"] = f"B:{batt}A, V:{vel}"
             except:
                 pass
         time.sleep(0.25)

@@ -48,7 +48,7 @@ void changeBottomDisplay(String content) {
 
 void updateDisplay() {
     if(stayUntil  > millis()||statusDisplaying){
-        if(advancedLog){Serial.println("Update Display: Passiv aufgrund showStatus." + String(stayUntil));}
+        log("Update Display: Passiv aufgrund showStatus." + String(stayUntil));
         return;
     }
     String text;

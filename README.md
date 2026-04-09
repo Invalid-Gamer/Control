@@ -2,12 +2,14 @@
 Work in Progress
 
 * ToDo: 
-    * config.cpp: (loadConfig) Troubleshoot und Debug fertig machen
-    * communication tcp, handler, generell communication
+    * shell debug Network outgoing
 
 * Dokumentation:
-    * Projektaufbau:
-        * Dateienunterteilung:
-            * main.cpp: Nur Setup, Loop: Welche Funktion wann
-            * config.h: Config Variablen, Link zu config.cpp
-            * config.cpp: Preferences (load, write)
+    * Aufbau:
+        * main.cpp: Globale Funktionen und setup/loop
+        * config.cpp: Config laden über Preferences.h
+        * shell.cpp: Shell für config, debug, alles eigentlich
+        * communication.cpp: UDP und TCP Comms
+        * DisplayManager.cpp: Menüs, alles was auf dem Display angezeigt wird
+        * joystick.cpp: Steuerung; Joystick eingabe, Aktionsverarbeitung
+        * global.h: Globale Variablen/Funktionen

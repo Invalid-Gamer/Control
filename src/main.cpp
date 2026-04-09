@@ -62,7 +62,7 @@ void piep(int amount) { // Kurzer Buzzerton (Hier definitert weil zu wenig für 
 
 void setup() {
   currentOpMode = SETUP;
-  Serial.begin(115200); // Serial Comms (Preferences ändern, debug)
+  Serial.begin(9600); // Serial Comms (Preferences ändern, debug)
   Serial.println("Serial up");
   // Pins Setup
   pinMode(Btn_Pin, INPUT_PULLUP);

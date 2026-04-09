@@ -286,15 +286,15 @@ void handleDebugCommands(String cmd) {
 //Nur EingabeChar setzen
 void printShellChar() {
     if(currentShellMode == BASE) {
-        Serial.println("$ ");
+        Serial.print("$ ");
     } else if(currentShellMode == CONFIG) {
-        Serial.println("Config $ ");
+        Serial.print("Config $ ");
     } else if(currentShellMode == WIFI) {
-        Serial.println("WiFi $ ");
+        Serial.print("WiFi $ ");
     } else if(currentShellMode == SCREEN) {
-        Serial.println("Display $ ");
+        Serial.print("Display $ ");
     } else if(currentShellMode == DEBUG) {
-        Serial.println("Debug $ ");
+        Serial.print("Debug $ ");
     }
 }
 
@@ -308,6 +308,7 @@ void shell() {
     while(currentOpMode == SHELL) {
         printShellChar();
         String shellInput = getSerialInput(false);
+        Serial.println(shellInput);
         if(currentShellMode == BASE) {
             handleBaseCommands(shellInput);
         } else if(currentShellMode == CONFIG) {

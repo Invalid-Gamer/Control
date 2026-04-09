@@ -273,6 +273,30 @@ void handleDebugCommands(String cmd) {
                 }
             }
         }
+    } else if(cmd == "network") {
+        Serial.println("Network: Incoming/Outgoing?: ");
+        String answer = getSerialInput(true);
+        if(answer != "ABORTCMD") {
+            Serial.println(answer);
+            if(answer == "Incoming" || answer == "incoming") {
+                Serial.println("Incoming network debug starting in 3 seconds! To exit, type cancel!");
+            while(true) {
+                Serial.println(handleRawTCP());
+                if(Serial.available() > 0) {
+                    String input = Serial.readString();
+                    input.trim();
+                    if(input == "cancel") {
+                        Serial.println("Exiting incoming network debug");
+                        break;
+                    }
+                }
+            }
+            } else if(answer == "Outgoing" || answer == "outgoing") {
+
+            } else {
+                Serial.println("Invalid answer: " + answer + " Aborting...");
+            }
+        }
     } else if(cmd == "exit") {
         Serial.println("Resuming to normal shell");
         currentShellMode = BASE;

@@ -45,6 +45,7 @@ String getWiFiStatus() {
     switch (WiFi.status()) { // KI generiert
         case WL_CONNECTED:  {     
         String info = "Verbunden!";
+        info += "\n SSID: " + WiFi.SSID();
         info += "\n IP: " + WiFi.localIP().toString();
         info += "\n Signal: " + String(WiFi.RSSI()) + "dBm";
         info += "\n Hostname: " + String(WiFi.getHostname());
@@ -126,4 +127,14 @@ void handleIncomingTCP() {
             if(advancedLog) Serial.println("Empfangen VEL: " + String(velValue));
         }
     }
+}
+
+String handleRawTCP() {
+    String line = "No TCP available.";
+    checkTCP();
+    if(tcp.available()) {
+        line = tcp.readString();
+        line.trim();
+    }
+    return line;
 }

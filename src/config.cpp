@@ -28,7 +28,7 @@ void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle 
 }
 
 bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, weitermachen; false = Fehler, Programm stoppen, debug
-    if(advancedLog){Serial.println("Started config load");}
+    log("Started config load");
     conf.begin("config", true);
     WiFi_SSID = conf.getString("wifi_ssid", "");
     WiFi_Pass = conf.getString("wifi_pass", "");
@@ -39,23 +39,24 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
     advancedLog = conf.getBool("advancedLog", false);
     menuWaitingDelay = conf.getInt("menu_delay", 0);
     conf.end();
-    if(advancedLog){Serial.println("Loaded config. Current config: "); outputConfigToSerial();}
+    log("Loaded config. Current config: ");
+    if(advancedLog){outputConfigToSerial();}
     if (WiFi_SSID == "" || WiFi_Pass == "") {
         // Debug, Warnen dass WiFi nicht vorhanden, Programm stoppen, auf Display anzeigen.
-        if(advancedLog){Serial.println("WiFi SSID/Pass nicht vorhanden!");}
+        log("WiFi SSID/Pass nicht vorhanden!");
         return false;
     } else if (Target_IP == "" || udp_Target_Port == 0 || tcp_Target_Port == 0) {
         // Debug, Warnen dass kein Target vorhanden, Programm stoppen, auf Display anzeigen.
-        if(advancedLog){Serial.println("Target IP/Port nicht vorhanden!");}
+        log("Target IP/Port nicht vorhanden!");
         return false;
     } else if (Device_Name == "" || menuWaitingDelay == 0) {
         // Auf Display warnen, fortfahren mit Standard-Namen
         if(Device_Name == "") {
             Device_Name = "Natasha Control";
-            if(advancedLog){Serial.println("Kein Device Name vorhanden! (Oder leer) Benutze Standard (Natasha Control)");}
+            log("Kein Device Name vorhanden! (Oder leer) Benutze Standard (Natasha Control)");
         } else if(menuWaitingDelay == 0) {
             menuWaitingDelay = 25;
-            if(advancedLog){Serial.println("Kein Menu Waiting Delay Wert festgelegt! Benutze Standard von 25...");}
+            log("Kein Menu Waiting Delay Wert festgelegt! Benutze Standard von 25...");
         }
         return true;
     } else {
@@ -67,15 +68,15 @@ bool writeConfig(String key, String value, bool ignoreExistance) { // Prüfen ob
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==8 || ignoreExistance) {
-            if(advancedLog){Serial.println("Changing config at: \nkey: " + key + "; value: "+ value);}
+            log("Changing config at: \nkey: " + key + "; value: "+ value);
             conf.putString(key.c_str(),value);
             return true;
         } else {
-            if(advancedLog){Serial.println("Failed changing config: Provided value isn't String");}
+            log("Failed changing config: Provided value isn't String");
             return false;
         }
     } else{
-        if(advancedLog){Serial.println("Failed changing config: Provided key does not exist!");}
+        log("Failed changing config: Provided key does not exist!");
         return false;
     }
     conf.end();
@@ -86,15 +87,15 @@ bool writeConfig(String key, int value, bool ignoreExistance) { // Prüfen ob ke
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==4 || ignoreExistance) {
-            if(advancedLog){Serial.println("Changing config at: \nkey: " + key + "; value: "+ String(value));}
+            log("Changing config at: \nkey: " + key + "; value: "+ String(value));
             conf.putInt(key.c_str(),value);
             return true;
         } else {
-            if(advancedLog){Serial.println("Failed changing config: Provided value isn't int");}
+            log("Failed changing config: Provided value isn't int");
             return false;
         }
     } else {
-        if(advancedLog){Serial.println("Failed changing config: Provided key does not exist!");}
+        log("Failed changing config: Provided key does not exist!");
         return false;
     }
     conf.end();
@@ -105,15 +106,15 @@ bool writeConfig(String key, bool value, bool ignoreExistance) {
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==1 || ignoreExistance) {
-            if(advancedLog){Serial.println("Changing config at: \nkey: " + key + "; value: "+ String(value));}
+            log("Changing config at: \nkey: " + key + "; value: "+ String(value));
             conf.putBool(key.c_str(), value);
             return true;
         } else {
-            if(advancedLog){Serial.println("Failed changing config: Provided value isn't bool");}
+            log("Failed changing config: Provided value isn't bool");
             return false;
         }
     } else {
-        if(advancedLog){Serial.println("Failed changing config: Provided key does not exist!");}
+        log("Failed changing config: Provided key does not exist!");
         return false;
     }
     conf.end();

@@ -19,25 +19,25 @@ int velValue = 0;
 bool setupWiFi() {
     showStatus("Verbinde WLAN... ");
     WiFi.setHostname(Device_Name.c_str());
-    if (advancedLog){Serial.println("WiFi: Using Credentials: "); Serial.println("SSID:" + WiFi_SSID + "; Pass: " + WiFi_Pass + "; Current Hostname: " + String(WiFi.getHostname()));}
+    log("WiFi: Using Credentials: "); log("SSID:" + WiFi_SSID + "; Pass: " + WiFi_Pass + "; Current Hostname: " + String(WiFi.getHostname()));
     WiFi.begin(WiFi_SSID.c_str(),WiFi_Pass.c_str());
     unsigned long start = millis();
-    if(advancedLog){Serial.println("Waiting for connection at: " + String(start));}
+    log("Waiting for connection at: " + String(start));
     while (WiFi.status() != WL_CONNECTED) {
         delay(100);
         if(millis() - start > 20000) {
-            if(advancedLog){Serial.println("WiFi Connection timed out!"); Serial.println("Waited for: " + String(millis() - start));}
+            log("WiFi Connection timed out!"); Serial.println("Waited for: " + String(millis() - start));
             return false;
         }
     }
-    if(advancedLog){Serial.println("WiFi successfully connected after: " + String(millis() - start));}
+    log("WiFi successfully connected after: " + String(millis() - start));
     showStatus("WiFi connected");
     removeStatus(1);
     return true;
 }
 
 void disconnectWiFi() {
-    if(advancedLog){Serial.println("WiFi disconnected");}
+    log("WiFi disconnected");
     WiFi.disconnect();
 }
 
@@ -65,14 +65,11 @@ String getMacAddress() {
 }
 
 void connectTCP() {
-    if(advancedLog){Serial.println("Baue TCP Verbindung auf");}
+    log("Baue TCP Verbindung auf");
     tcp.connect(Target_IP.c_str(), tcp_Target_Port);
     unsigned long start = millis();
     while(!tcp.connected()) {
         delay(10);
-        if(millis() - start > 2000) {
-            Serial.println("TCP Verbingung hakt!");
-        }
         if(millis() - start > 5000) {
             Serial.println("TCP Verbindungsaufbau nicht möglich! Abbruch...");
             return;
@@ -94,13 +91,13 @@ void checkTCP() {
 void sendTCP(String type, String value) {
     checkTCP();
     tcp.println(type + ":" + value);
-    if(advancedLog){Serial.println("Sende TCP. type: " + type + "; value: " + value);}
+    log("Sende TCP. type: " + type + "; value: " + value);
 }
 
 void sendTCP(String type, int value) {
     checkTCP();
     tcp.println(type + ":" + value);
-    if(advancedLog){Serial.println("Sende TCP. type: " + type + "; value: " + value);}
+    log("Sende TCP. type: " + type + "; value: " + value);
 }
 
 void updateTCP() {
@@ -121,10 +118,10 @@ void handleIncomingTCP() {
         line.trim();
         if(line.startsWith("BATT:")) {
             battValue = line.substring(5).toFloat();
-            if(advancedLog){Serial.println("Empfangen BATT: " + String(battValue));}
+            log("Empfangen BATT: " + String(battValue));
         } else if (line.startsWith("VEL:")) {
             velValue = line.substring(4).toInt();
-            if(advancedLog) Serial.println("Empfangen VEL: " + String(velValue));
+            log("Empfangen VEL: " + String(velValue));
         }
     }
 }

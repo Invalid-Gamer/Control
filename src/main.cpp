@@ -21,6 +21,12 @@ ControlMode currentMenuOption = MANUAL;
 bool loadedConfig;
 bool WiFiConnected;
 
+void log(String text) {
+  if(advancedLog) {
+    Serial.println(text);
+  }
+}
+
 void troubleshoot(void (*callback)(), bool doContinue) {
   Serial.println("Fehler is aufgetreten!");
   Serial.println("Starte Callback mit Loglevel debug... ");
@@ -72,7 +78,7 @@ void setup() {
   // LCD Setup
   initDisplay();
   // Lade Preferences
-  if(advancedLog){Serial.println("Loading config");}
+  log("Loading config");
   loadedConfig = loadConfig();
   if(!loadedConfig) {troubleshoot(loadConfig, false);}
   WiFiConnected = setupWiFi();

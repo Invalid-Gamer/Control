@@ -29,6 +29,7 @@ extern ControlMode currentCtrlMode;
 extern ControlMode currentMenuOption;
 
 // Globale Funktionen
+void log(String text);
 void piep(int amount);
 void troubleshoot(void (*callback()), bool doContinue);
 void troubleshoot(bool (*callback()), bool doContinue);

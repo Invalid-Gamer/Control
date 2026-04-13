@@ -3,6 +3,7 @@ Work in Progress
 
 * ToDo: 
     * shell debug Network outgoing
+    * TCP Verbindung: Während mode 0 nur leere pkgs? Irgendwie aufrecht erhalten!
 
 * Dokumentation:
     * Aufbau:

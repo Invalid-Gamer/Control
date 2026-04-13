@@ -73,7 +73,7 @@ void updateDisplay() {
                             changeBottomDisplay("Manual");
                             break;
                         case HAUTO:
-                            changeBottomDisplay("Halb-Auto");
+                            changeBottomDisplay("Halb-Automatik");
                             break;
                         case AUTO:
                             changeBottomDisplay("Automatik");
@@ -90,7 +90,7 @@ void updateDisplay() {
                     break;
                 }
                 case HAUTO: {
-                    displayMode("Halb-Auto");
+                    displayMode("Halb-Automatik");
                     String bottomContent = "Bat:" + String(battValue) + "A V:" + String(velValue);
                     changeBottomDisplay(bottomContent);
                     break;

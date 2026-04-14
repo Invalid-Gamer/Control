@@ -48,13 +48,13 @@ void changeBottomDisplay(String content) {
 
 void updateDisplay() {
     if(stayUntil  > millis()||statusDisplaying){
-        log("Update Display: Passiv aufgrund showStatus." + String(stayUntil));
+        log("Update Display: Passive because of showStatus." + String(stayUntil));
         return;
     }
     String text;
     switch(currentOpMode) {
         case SETUP: {
-            displayMode("Setup...");
+            displayMode("Initialisiere...");
             break;
         }
         case SHELL: {
@@ -70,10 +70,10 @@ void updateDisplay() {
                             changeBottomDisplay("");
                             break;
                         case MANUAL:
-                            changeBottomDisplay("Manual");
+                            changeBottomDisplay("Manuell");
                             break;
                         case HAUTO:
-                            changeBottomDisplay("Halb-Auto");
+                            changeBottomDisplay("Halb-Automatik");
                             break;
                         case AUTO:
                             changeBottomDisplay("Automatik");
@@ -84,13 +84,13 @@ void updateDisplay() {
                     }
                     break;
                 case MANUAL: {
-                    displayMode("Manual");
+                    displayMode("Manuell");
                     String bottomContent = "Bat:" + String(battValue) + "A V:" + String(velValue);
                     changeBottomDisplay(bottomContent);
                     break;
                 }
                 case HAUTO: {
-                    displayMode("Halb-Auto");
+                    displayMode("Halb-Automatik");
                     String bottomContent = "Bat:" + String(battValue) + "A V:" + String(velValue);
                     changeBottomDisplay(bottomContent);
                     break;

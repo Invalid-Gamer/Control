@@ -37,7 +37,7 @@ String getSerialInput(bool timeout) {
 // BASE Shell 
 void handleBaseCommands(String cmd) {
     if (cmd == "help"){
-        Serial.println("Help:\nconfig - Konfigurationsmanagement\nwifi - Gehe in das WiFi Management\ndisplay - Display Management\nsetCtrlMode - Control Mode ändern\ndebug - Debug tool for Network, Joystick, etc.\nping - Überprüfe die Responsivität der shell\nreload - Startet den ESP neu!\nexit - Verlasse die shell oder ein Unterprogramm");
+        Serial.println("Help:\nconfig - Configmanagement\nwifi - WiFi-Management\ndisplay - Display Management\nsetCtrlMode - change Control Mode\ndebug - Debug tool for Network, Joystick, etc.\nping - Ping\nreload - Restart the Remote\nexit - Exit shell or subprocess");
     } else if(cmd == "config") {
         currentShellMode = CONFIG;
         Serial.println("Config Shell " + configShellVer);
@@ -48,7 +48,7 @@ void handleBaseCommands(String cmd) {
         currentShellMode = SCREEN;
         Serial.println("Display Shell "+ displayShellVer);
     } else if (cmd == "setCtrlMode") {
-        Serial.println("Control Mode setzen. Auswahl: OFF/MANUAL/HAUTO/AUTO :");
+        Serial.println("Control Mode Choose: OFF/MANUAL/HAUTO/AUTO :");
         String set = getSerialInput(true);
         if(set != "ABORTCMD") {
             if(set == "OFF") {
@@ -60,10 +60,10 @@ void handleBaseCommands(String cmd) {
             } else if(set == "AUTO") {
                 currentCtrlMode = AUTO;
             } else {
-                Serial.println("Dieser Control Mode existiert nicht: " + set);
+                Serial.println("Control Mode doesn't exist: " + set);
                 return;
             }
-            Serial.println("Control Mode erfolgreich auf " + set + " gesetzt.");
+            Serial.println("Control Mode succesfully set to " + set);
         }
     } else if (cmd == "debug") {
         currentShellMode = DEBUG;
@@ -84,7 +84,7 @@ void handleBaseCommands(String cmd) {
         Serial.println("Exiting shell");
         currentOpMode = REGULAR;
     } else {
-        Serial.println("Command nicht gefunden: " + cmd);
+        Serial.println("Command not found: " + cmd);
     }
 }
 
@@ -163,7 +163,7 @@ void shellRemoveConf(bool entireDelete) {
 // CONFIG Shell
 void handleConfigCommands(String cmd) {
     if(cmd == "help") {
-        Serial.println("Config Shell Help:\nload - lädt den Config aus dem Speicher erneut in die Variablen\nshow - Zeigt aktuelle config Tabelle\nwrite - Schreibe in einen existierenden Config Eintrag (+ SECURE_OFF um Werte neu hinzuzufügen)\nremove - löscht Eintrag aus Config (+ SECURE_OFF um Keys zu entfernen ACHTUNG - CODE WIRD ZERSTÖRT)\nexit - Kehre zur Standard-Shell zurück");
+        Serial.println("Config Shell Help:\nload - load Config into Variables\nshow - Show current config\nwrite - Write into existing Config entry (+ SECURE_OFF to add new entries/change datatype of existing entries)\nremove - Delete entry out of config (+ SECURE_OFF to totally delete keys DANGER - CODE WONT WORK)\nexit - Return to Standard-Shell");
     } else if (cmd == "load") {
         bool Ergebnis = loadConfig();
         if(Ergebnis){Serial.println("Config loaded successfully");} else {Serial.println("Config didn't load successfully");}
@@ -181,7 +181,7 @@ void handleConfigCommands(String cmd) {
         Serial.println("Resuming to normal shell");
         currentShellMode = BASE;
     } else {
-        Serial.println("Command nicht gefunden: " + cmd);
+        Serial.println("Command not found: " + cmd);
     }
 }
 
@@ -192,7 +192,7 @@ void handleConfigCommands(String cmd) {
 // WIFI Shell
 void handleWiFiCommands(String cmd) {
     if(cmd == "help") {
-        Serial.println("WiFi Shell Help:\n--Um WiFi Credentials zu ändern, gehe in die Config Shell!--\nstatus - WiFi Status\nconnect - Mit WLAN Verbinden\ndisconnect - Verbindung trennen\ngetMacAddr - Gibt die Mac Addresse wieder\nexit - Kehre zur Standard-Shell zurück");
+        Serial.println("WiFi Shell Help:\n--To change WiFi Credentials go to config shell!--\nstatus - WiFi Status\nconnect - Connect with WiFi\ndisconnect - Disconnect WiFi\ngetMacAddr - Returns MAC Address\nexit - Return to Standard-Shell");
     } else if(cmd == "status") {
         Serial.println(getWiFiStatus());
     } else if(cmd == "connect") {
@@ -200,18 +200,18 @@ void handleWiFiCommands(String cmd) {
         if(Ergebnis) {
             Serial.println("WiFi connected");
         } else {
-            Serial.println("Fehler! Siehe Debug Log!");
+            Serial.println("Error! Inspect debug log!");
         }
     } else if(cmd == "disconnect") {
         disconnectWiFi();
-        Serial.println("WLAN Verbindung getrennt.");
+        Serial.println("WiFi disconnected.");
     } else if(cmd == "getMacAddr") {
         Serial.println(getMacAddress());
     } else if(cmd == "exit") {
         Serial.println("Resuming to normal shell");
         currentShellMode = BASE;
     } else {
-        Serial.println("Commmand nicht gefunden: " + cmd);
+        Serial.println("Commmand not found: " + cmd);
     }
 }
 
@@ -222,31 +222,31 @@ void handleWiFiCommands(String cmd) {
 // DISPLAY SHELL
 void handleDisplayCommands(String cmd) {
     if(cmd == "help") {
-        Serial.println("Display Shell Help:\nbacklight - schalte das backlight An/Aus\nclear - lösche alle Daten auf dem Display\nshowStatus - Zeige einen Status auf dem Display (Max. 32 Zeichen)\nexit - Kehre zur Standard-Shell zurück");
+        Serial.println("Display Shell Help:\nbacklight - turn backlight On/Off\nclear - clear the display\nshowStatus - show status on display (Max. 32 Characters)\nexit - Return to Standard-Shell");
     } else if(cmd == "backlight") {
-        Serial.println("An/Aus? (NUR 1/0):");
+        Serial.println("On/Off? (ONLY 1/0):");
         String value = getSerialInput(true);
         if(value != "ABORTCMD"){
             displaySetBacklight((bool)value.toInt());
-            Serial.println("Backlight geändert.");
+            Serial.println("Backlight set.");
         }
     } else if(cmd == "clear") {
         removeStatus(0);
         clearDisplay();
         Serial.println("Display cleared");
     } else if(cmd == "showStatus") {
-        Serial.println("Was möchtest du anzeigen? (MAX 32 Zeichen): ");
+        Serial.println("Enter Display content? (MAX 32 Characters): ");
         String text = getSerialInput(true);
         if (text != "ABORTCMD"){
             showStatus(text);
-            Serial.println("Status gesetzt");
+            Serial.println("Status set");
         }
     } else if(cmd == "exit") {
         Serial.println("Resuming to normal shell");
         showStatus("In Shell");
         currentShellMode = BASE;
     } else {
-        Serial.println("Command nicht gefunden: " + cmd);
+        Serial.println("Command not found: " + cmd);
     }
 }
 
@@ -257,7 +257,7 @@ void handleDisplayCommands(String cmd) {
 //DEBUG Shell
 void handleDebugCommands(String cmd) {
     if(cmd == "help") {
-        Serial.println("Debug Shell Help:\n---Debug Shell sorgt für logs innerhalb von Aktionen wie Joystick movement, network outgoing und ingoing.---\njoystick - roher Joystick Daten stream\nexit - Kehre zur Standard-Shell zurück");
+        Serial.println("Debug Shell Help:\n---Debug Shell logs optional functions like Joystick movement, network outgoing and ingoing.---\njoystick - raw Joystick datastream\nexit - Return to Standard-Shell");
     } else if(cmd == "joystick") {
         Serial.println("Joystick debug starting in 3 seconds! To exit, type cancel!");
         delay(3000);

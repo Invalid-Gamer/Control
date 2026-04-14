@@ -104,11 +104,21 @@ void updateTCP() {
     sendTCP("mode",currentCtrlMode);
 }
 
-void sendMovementData(JoystickRaw raw, int currentMode) {
-    ControlPacket packet = {(uint16_t)raw.x, (uint16_t)raw.y, (uint8_t)currentMode };
-    udp.beginPacket(Target_IP.c_str(), udp_Target_Port);
+void sendUDP(ControlPacket packet) {
+    udp.beginPacket(Target_IP.c_str(),udp_Target_Port);
     udp.write((uint8_t*)&packet, sizeof(packet));
     udp.endPacket();
+}
+
+void sendUDP(String data) {
+    udp.beginPacket(Target_IP.c_str(),udp_Target_Port);
+    udp.write((uint8_t*)&data,sizeof(data));
+    udp.endPacket();
+}
+
+void sendMovementData(JoystickRaw raw, int currentMode) {
+    ControlPacket packet = {(uint16_t)raw.x, (uint16_t)raw.y, (uint8_t)currentMode };
+    sendUDP(packet);
 }
 
 void handleIncomingTCP() {

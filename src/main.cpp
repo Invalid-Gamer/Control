@@ -28,8 +28,8 @@ void log(String text) {
 }
 
 void troubleshoot(void (*callback)(), bool doContinue) {
-  Serial.println("Fehler is aufgetreten!");
-  Serial.println("Starte Callback mit Loglevel debug... ");
+  Serial.println("Encountered an Error!");
+  Serial.println("Starting Callback with Loglevel debug... ");
   delay(1000);
   advancedLog = true;
   callback();
@@ -42,8 +42,8 @@ void troubleshoot(void (*callback)(), bool doContinue) {
 }
 
 void troubleshoot(bool (*callback)(), bool doContinue) {
-  Serial.println("Fehler is aufgetreten!");
-  Serial.println("Starte Callback mit Loglevel debug... ");
+  Serial.println("Encountered an Error!");
+  Serial.println("Starting Callback with Loglevel debug... ");
   delay(1000);
   advancedLog = true;
   bool successed = callback();
@@ -84,7 +84,7 @@ void setup() {
   WiFiConnected = setupWiFi();
   if(!WiFiConnected){troubleshoot(setupWiFi, false);}
   Serial.println("Setup finished!");
-  showStatus("Setup finished");
+  showStatus("Setup fertig");
   removeStatus(1);
   currentOpMode = REGULAR;
 }

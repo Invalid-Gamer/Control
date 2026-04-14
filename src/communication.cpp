@@ -31,7 +31,7 @@ bool setupWiFi() {
         }
     }
     log("WiFi successfully connected after: " + String(millis() - start));
-    showStatus("WiFi connected");
+    showStatus("WLAN Verbunden");
     removeStatus(1);
     return true;
 }
@@ -71,7 +71,7 @@ void connectTCP() {
     while(!tcp.connected()) {
         delay(10);
         if(millis() - start > 5000) {
-            Serial.println("TCP Verbindungsaufbau nicht möglich! Abbruch...");
+            Serial.println("Unable to connect TCP! Aborting...");
             return;
         }
     }
@@ -83,7 +83,7 @@ void checkTCP() {
     }
     if(!tcp.connected()) {
         currentCtrlMode = OFF;
-        showStatus("TCP Disconnected");
+        showStatus("TCP Getrennt");
         removeStatus(5);
     }
 }
@@ -97,7 +97,7 @@ void sendTCP(String type, String value) {
 void sendTCP(String type, int value) {
     checkTCP();
     tcp.println(type + ":" + value);
-    log("Sende TCP. type: " + type + "; value: " + value);
+    log("Sending TCP. type: " + type + "; value: " + value);
 }
 
 void updateTCP() {
@@ -118,10 +118,10 @@ void handleIncomingTCP() {
         line.trim();
         if(line.startsWith("BATT:")) {
             battValue = line.substring(5).toFloat();
-            log("Empfangen BATT: " + String(battValue));
+            log("Received BATT: " + String(battValue));
         } else if (line.startsWith("VEL:")) {
             velValue = line.substring(4).toInt();
-            log("Empfangen VEL: " + String(velValue));
+            log("Received VEL: " + String(velValue));
         }
     }
 }

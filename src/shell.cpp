@@ -332,8 +332,14 @@ void handleDebugCommands(String cmd) {
                     currentCtrlMode = MANUAL;
                     while(true) {
                         JoystickRaw joyStickPos = getRawJoystick();
-                        Serial.println("Sending" + joyStickPos.x + (int)currentCtrlMode); // WIP
+                        ControlPacket packet = {(uint16_t)joyStickPos.x, (uint16_t)joyStickPos.y, (uint8_t)currentCtrlMode };
+                        Serial.print(packet.x);
+                        Serial.print(" ");
+                        Serial.print(packet.y);
+                        Serial.print(" ");
+                        Serial.println(packet.mode);
                         sendMovementData(joyStickPos, (int)currentCtrlMode);
+                        delay(20);
                         if(Serial.available() > 0) {
                             String input = Serial.readString();
                             input.trim();

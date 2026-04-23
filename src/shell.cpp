@@ -292,7 +292,93 @@ void handleDebugCommands(String cmd) {
                 }
             }
             } else if(answer == "Outgoing" || answer == "outgoing") {
-
+                Serial.println("Outgoing network debug - Choose one of the following options:\n1 - Send custom packets\n2 - Send real packages like manual mode\n3 - Simulate TCP\nexit - Exit the subprocess");
+                answer = getSerialInput(true);
+                if(answer == "1") {
+                    Serial.println("Enter TCP/UDP: ");
+                    answer = getSerialInput(true);
+                    if(answer == "TCP" || answer == "tcp") {
+                        Serial.println("Enter packet key:");
+                        String key = getSerialInput(true);
+                        if(key != "ABORTCMD") {
+                            Serial.println("Enter packet value:");
+                            String value = getSerialInput(true);
+                            if(value != "ABORTCMD") {
+                                Serial.println("Sending: " + key + ":" + value);
+                                sendTCP(key,value);
+                            } else {
+                                return;
+                            }
+                        } else {
+                            return;
+                        }
+                    } else if(answer == "UDP" || answer == "udp") {
+                        Serial.println("Enter custom packet data:");
+                        answer = getSerialInput(true);
+                        if(answer != "ABORTCMD") {
+                            Serial.println("Sending " + answer);
+                            sendUDP(answer);
+                        } else {
+                            return;
+                        }
+                    } else if(answer == "ABORTCMD") {
+                        return;
+                    } else {
+                        Serial.println("Invalid answer: " + answer + " Aborting...");
+                    }
+                } else if (answer == "2") {
+                    Serial.println("Starting in 3 seconds... Use joystick like in manual mode. Sent UDP packets will be listed here. To exit, type cancel");
+                    delay(3000);
+                    currentCtrlMode = MANUAL;
+                    while(true) {
+                        JoystickRaw joyStickPos = getRawJoystick();
+                        ControlPacket packet = {(uint16_t)joyStickPos.x, (uint16_t)joyStickPos.y, (uint8_t)currentCtrlMode };
+                        Serial.print(packet.x);
+                        Serial.print(" ");
+                        Serial.print(packet.y);
+                        Serial.print(" ");
+                        Serial.println(packet.mode);
+                        sendMovementData(joyStickPos, (int)currentCtrlMode);
+                        delay(20);
+                        if(Serial.available() > 0) {
+                            String input = Serial.readString();
+                            input.trim();
+                            if(input == "cancel") {
+                                Serial.println("Exiting outgoing network debug");
+                                break;
+                            }
+                        }
+                    }
+                    currentCtrlMode = OFF;
+                } else if (answer == "3") {
+                    Serial.println("Enter currentCtrlMode to be sent (OFF,MANUAL,HAUTO,AUTO,INFO)");
+                    answer = getSerialInput(true);
+                    int value = 0;
+                    if(answer == "OFF") {
+                        value = 0;
+                    } else if(answer == "MANUAL") {
+                        value = 1;
+                    } else if(answer == "HAUTO") {
+                        value = 2;
+                    } else if(answer == "AUTO") {
+                        value = 3;
+                    } else if(answer == "INFO") {
+                        value = 4;
+                    } else if(answer == "ABORTCMD") {
+                        return;
+                    } else {
+                        Serial.println("Invalid input: " + answer + " Aborting...");
+                        return;
+                    }
+                    sendTCP("mode",value);
+                    Serial.println("Sending: mode:" + value);
+                } else if (answer == "exit") {
+                    Serial.println("Exiting to Debug shell");
+                } else if (answer == "ABORTCMD") {
+                    return;
+                }
+            } else if (answer == "ABORTCMD") {
+                return;
             } else {
                 Serial.println("Invalid answer: " + answer + " Aborting...");
             }

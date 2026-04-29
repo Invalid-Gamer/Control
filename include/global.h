@@ -8,7 +8,7 @@ const int Vry_Pin = 33; // Y-Richtung Joystick (getauscht damit kabelführung kl
 const int Bzr_Pin = 16; // Buzzer
 extern bool advancedLog; // Loglevel boolean
 extern float battValue;
-extern int velValue;
+extern float lenkungValue;
 
 // Globale Variablen
 enum OperatingMode { // Global: Was muss angezeigt werden etc.
@@ -16,6 +16,7 @@ enum OperatingMode { // Global: Was muss angezeigt werden etc.
     SHELL,
     REGULAR
 };
+
 enum ControlMode { // Global und für Joystick/Network: Was muss gesendet werden?
     OFF,
     MANUAL,

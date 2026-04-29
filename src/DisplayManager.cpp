@@ -85,25 +85,25 @@ void updateDisplay() {
                     break;
                 case MANUAL: {
                     displayMode("Manuell");
-                    String bottomContent = "Bat:" + String(battValue) + "A V:" + String(velValue);
+                    String bottomContent = "Bat:" + String(battValue) + "V L:" + String(lenkungValue);
                     changeBottomDisplay(bottomContent);
                     break;
                 }
                 case HAUTO: {
                     displayMode("Halb-Automatik");
-                    String bottomContent = "Bat:" + String(battValue) + "A V:" + String(velValue);
+                    String bottomContent = "Bat:" + String(battValue) + "V L:" + String(lenkungValue);
                     changeBottomDisplay(bottomContent);
                     break;
                 }
                 case AUTO: {
                     displayMode("Automatik"); 
-                    String bottomContent = "Bat:" + String(battValue) + "A V:" + String(velValue);
+                    String bottomContent = "Bat:" + String(battValue) + "V L:" + String(lenkungValue);
                     changeBottomDisplay(bottomContent);
                     break;
                 }
                 case INFO: {
                     displayMode("Informationen");
-                    String bottomContent = "Bat:" + String(battValue) + "A V:" + String(velValue);
+                    String bottomContent = "Bat:" + String(battValue) + "V L:" + String(lenkungValue);
                     changeBottomDisplay(bottomContent);
                     break;
                 }

@@ -91,15 +91,20 @@ void setup() {
 
 void loop() {
   serialHandler();
-  if(currentCtrlMode == OFF) {
-    joyStickMenu();
+  if (isWiFiConnected()) {
+    if(currentCtrlMode == OFF) {
+      joyStickMenu();
+    } else {
+      joyStickMode();
+      handleIncomingTCP();
+    }
+    updateDisplay();
+    if(currentCtrlMode == MANUAL || currentCtrlMode == HAUTO) {
+      JoystickRaw joyStickPos = getRawJoystick();
+      sendMovementData(joyStickPos, (int)currentCtrlMode);
+    }
   } else {
-    joyStickMode();
-    handleIncomingTCP();
-  }
-  updateDisplay();
-  if(currentCtrlMode == MANUAL || currentCtrlMode == HAUTO) {
-    JoystickRaw joyStickPos = getRawJoystick();
-    sendMovementData(joyStickPos, (int)currentCtrlMode);
+    WiFiConnected = setupWiFi();
+    if(!WiFiConnected){troubleshoot(setupWiFi, false);}
   }
 }

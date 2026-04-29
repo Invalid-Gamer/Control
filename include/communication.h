@@ -15,6 +15,7 @@ bool setupWiFi();
 void disconnectWiFi();
 void updateTCP();
 String getWiFiStatus();
+bool isWiFiConnected();
 String getMacAddress();
 void sendTCP(String type, String value);
 void sendTCP(String type, int value);

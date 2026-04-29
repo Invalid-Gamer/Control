@@ -2,8 +2,8 @@
 Work in Progress
 
 * ToDo: 
-    * shell debug Network outgoing
-    * TCP Verbindung: Während mode 0 nur leere pkgs? Irgendwie aufrecht erhalten!
+    * shell network debug: Send looping custom udp
+    * shell: Add quit command to exit shell from everywhere
 
 * Dokumentation:
     * Aufbau:

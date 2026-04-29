@@ -13,7 +13,7 @@ WiFiClient tcp;
 unsigned long lastUdp = 0;
 int lastMode = -1;
 float battValue = 0;
-int velValue = 0;
+float lenkungValue = 0;
 
 
 bool setupWiFi() {
@@ -57,6 +57,14 @@ String getWiFiStatus() {
         case WL_IDLE_STATUS:     return "Leerlauf (WL_IDLE_STATUS)";
         case WL_DISCONNECTED:    return "Getrennt (WL_DISCONNECTED)";
         default:                 return "Unbekannter Status (" + String(WiFi.status()) + ")";
+    }
+}
+
+bool isWiFiConnected() {
+    if (WiFi.status() == WL_CONNECTED) {
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -129,9 +137,9 @@ void handleIncomingTCP() {
         if(line.startsWith("BATT:")) {
             battValue = line.substring(5).toFloat();
             log("Received BATT: " + String(battValue));
-        } else if (line.startsWith("VEL:")) {
-            velValue = line.substring(4).toInt();
-            log("Received VEL: " + String(velValue));
+        } else if (line.startsWith("LENK:")) {
+            lenkungValue = line.substring(4).toFloat();
+            log("Received VEL: " + String(lenkungValue));
         }
     }
 }

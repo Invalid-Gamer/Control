@@ -138,8 +138,8 @@ void handleIncomingTCP() {
             battValue = line.substring(5).toFloat();
             log("Received BATT: " + String(battValue));
         } else if (line.startsWith("LENK:")) {
-            lenkungValue = line.substring(4).toFloat();
-            log("Received VEL: " + String(lenkungValue));
+            lenkungValue = line.substring(5).toFloat();
+            log("Received LENK: " + String(lenkungValue));
         }
     }
 }

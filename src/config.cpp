@@ -28,7 +28,7 @@ void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle 
 }
 
 bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, weitermachen; false = Fehler, Programm stoppen, debug
-    log.debug("Started config load");
+    logging.debug("Started config load");
     conf.begin("config", true);
     WiFi_SSID = conf.getString("wifi_ssid", "");
     WiFi_Pass = conf.getString("wifi_pass", "");
@@ -39,24 +39,24 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
     advancedLog = conf.getBool("advancedLog", false);
     menuWaitingDelay = conf.getInt("menu_delay", 0);
     conf.end();
-    log.debug("Loaded config. Current config: ");
+    logging.debug("Loaded config. Current config: ");
     if(advancedLog){outputConfigToSerial();}
     if (WiFi_SSID == "" || WiFi_Pass == "") {
         // Debug, Warnen dass WiFi nicht vorhanden, Programm stoppen, auf Display anzeigen.
-        log.error("WiFi SSID/Pass nicht vorhanden!");
+        logging.error("WiFi SSID/Pass nicht vorhanden!");
         return false;
     } else if (Target_IP == "" || udp_Target_Port == 0 || tcp_Target_Port == 0) {
         // Debug, Warnen dass kein Target vorhanden, Programm stoppen, auf Display anzeigen.
-        log.error("Target IP/Port nicht vorhanden!");
+        logging.error("Target IP/Port nicht vorhanden!");
         return false;
     } else if (Device_Name == "" || menuWaitingDelay == 0) {
         // Auf Display warnen, fortfahren mit Standard-Namen
         if(Device_Name == "") {
             Device_Name = "Natasha Control";
-            log.error("Kein Device Name vorhanden! (Oder leer) Benutze Standard (Natasha Control)");
+            logging.error("Kein Device Name vorhanden! (Oder leer) Benutze Standard (Natasha Control)");
         } else if(menuWaitingDelay == 0) {
             menuWaitingDelay = 25;
-            log.error("Kein Menu Waiting Delay Wert festgelegt! Benutze Standard von 25...");
+            logging.error("Kein Menu Waiting Delay Wert festgelegt! Benutze Standard von 25...");
         }
         return true;
     } else {
@@ -68,15 +68,15 @@ bool writeConfig(String key, String value, bool ignoreExistance) { // Prüfen ob
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==8 || ignoreExistance) {
-            log.info("Changing config at: \nkey: " + key + "; value: "+ value);
+            logging.info("Changing config at: \nkey: " + key + "; value: "+ value);
             conf.putString(key.c_str(),value);
             return true;
         } else {
-            log.error("Failed changing config: Provided value isn't String");
+            logging.error("Failed changing config: Provided value isn't String");
             return false;
         }
     } else{
-        log.error("Failed changing config: Provided key does not exist!");
+        logging.error("Failed changing config: Provided key does not exist!");
         return false;
     }
     conf.end();
@@ -87,15 +87,15 @@ bool writeConfig(String key, int value, bool ignoreExistance) { // Prüfen ob ke
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==4 || ignoreExistance) {
-            log.info("Changing config at: \nkey: " + key + "; value: "+ String(value));
+            logging.info("Changing config at: \nkey: " + key + "; value: "+ String(value));
             conf.putInt(key.c_str(),value);
             return true;
         } else {
-            log.error("Failed changing config: Provided value isn't int");
+            logging.error("Failed changing config: Provided value isn't int");
             return false;
         }
     } else {
-        log.error("Failed changing config: Provided key does not exist!");
+        logging.error("Failed changing config: Provided key does not exist!");
         return false;
     }
     conf.end();
@@ -106,15 +106,15 @@ bool writeConfig(String key, bool value, bool ignoreExistance) {
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==1 || ignoreExistance) {
-            log.info("Changing config at: \nkey: " + key + "; value: "+ String(value));
+            logging.info("Changing config at: \nkey: " + key + "; value: "+ String(value));
             conf.putBool(key.c_str(), value);
             return true;
         } else {
-            log.error("Failed changing config: Provided value isn't bool");
+            logging.error("Failed changing config: Provided value isn't bool");
             return false;
         }
     } else {
-        log.error("Failed changing config: Provided key does not exist!");
+        logging.error("Failed changing config: Provided key does not exist!");
         return false;
     }
     conf.end();

@@ -2,7 +2,7 @@
 #define GLOBAL_H
 
 #include <logging.h>
-extern Logging log();
+extern Logging logging;
 
 // Pin Belegungen
 const int Btn_Pin = 25; // Button vom Joystick

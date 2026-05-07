@@ -73,8 +73,8 @@ void setup() {
   initDisplay();
   // Lade Preferences
   loadedConfig = loadConfig();
-  Logging log(advancedLog);
-  log.info("Loading config");
+  Logging logging(advancedLog);
+  logging.info("Loading config");
   if(!loadedConfig) {troubleshoot(loadConfig, false);}
   WiFiConnected = setupWiFi();
   if(!WiFiConnected){troubleshoot(setupWiFi, false);}

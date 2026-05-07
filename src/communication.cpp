@@ -19,25 +19,25 @@ float lenkungValue = 0;
 bool setupWiFi() {
     showStatus("Verbinde WLAN... ");
     WiFi.setHostname(Device_Name.c_str());
-    log.debug("WiFi: Using Credentials: "); log.debug("SSID:" + WiFi_SSID + "; Pass: " + WiFi_Pass + "; Current Hostname: " + String(WiFi.getHostname()));
+    logging.debug("WiFi: Using Credentials: "); logging.debug("SSID:" + WiFi_SSID + "; Pass: " + WiFi_Pass + "; Current Hostname: " + String(WiFi.getHostname()));
     WiFi.begin(WiFi_SSID.c_str(),WiFi_Pass.c_str());
     unsigned long start = millis();
-    log.debug("Waiting for connection at: " + String(start));
+    logging.debug("Waiting for connection at: " + String(start));
     while (WiFi.status() != WL_CONNECTED) {
         delay(100);
         if(millis() - start > 20000) {
-            log.error("WiFi Connection timed out!"); log.error("Waited for: " + String(millis() - start));
+            logging.error("WiFi Connection timed out!"); logging.error("Waited for: " + String(millis() - start));
             return false;
         }
     }
-    log.debug("WiFi successfully connected after: " + String(millis() - start));
+    logging.debug("WiFi successfully connected after: " + String(millis() - start));
     showStatus("WLAN Verbunden");
     removeStatus(1);
     return true;
 }
 
 void disconnectWiFi() {
-    log.debug("WiFi disconnected");
+    logging.debug("WiFi disconnected");
     WiFi.disconnect();
 }
 
@@ -73,7 +73,7 @@ String getMacAddress() {
 }
 
 void connectTCP() {
-    log.debug("Baue TCP Verbindung auf");
+    logging.debug("Baue TCP Verbindung auf");
     tcp.connect(Target_IP.c_str(), tcp_Target_Port);
     unsigned long start = millis();
     while(!tcp.connected()) {
@@ -99,13 +99,13 @@ void checkTCP() {
 void sendTCP(String type, String value) {
     checkTCP();
     tcp.println(type + ":" + value);
-    log.debug("Sende TCP. type: " + type + "; value: " + value);
+    logging.debug("Sende TCP. type: " + type + "; value: " + value);
 }
 
 void sendTCP(String type, int value) {
     checkTCP();
     tcp.println(type + ":" + value);
-    log.debug("Sending TCP. type: " + type + "; value: " + value);
+    logging.debug("Sending TCP. type: " + type + "; value: " + value);
 }
 
 void updateTCP() {
@@ -136,10 +136,10 @@ void handleIncomingTCP() {
         line.trim();
         if(line.startsWith("BATT:")) {
             battValue = line.substring(5).toFloat();
-            log.debug("Received BATT: " + String(battValue));
+            logging.debug("Received BATT: " + String(battValue));
         } else if (line.startsWith("LENK:")) {
             lenkungValue = line.substring(5).toFloat();
-            log.debug("Received LENK: " + String(lenkungValue));
+            logging.debug("Received LENK: " + String(lenkungValue));
         }
     }
 }

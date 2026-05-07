@@ -23,7 +23,7 @@ void joyStickMenu() {
         }
         piep(1);
         delay(menuWaitingDelay);
-        log.debug("Menu right (Now selected: " + String(currentMenuOption) + ")");
+        logging.debug("Menu right (Now selected: " + String(currentMenuOption) + ")");
     } else if(currentPos.x < limit_left) {
         switch(currentMenuOption) {
             case INFO: currentMenuOption = AUTO; break;
@@ -33,12 +33,12 @@ void joyStickMenu() {
         }
         piep(1);
         delay(menuWaitingDelay);
-        log.debug("Menu left (Now selected: " + String(currentMenuOption) + ")");
+        logging.debug("Menu left (Now selected: " + String(currentMenuOption) + ")");
     } else if (currentPos.btn) {
         piep(2);
         currentCtrlMode = currentMenuOption;
         updateTCP();
-        log.debug("Button pressed (Selected Mode: " + String(currentCtrlMode) + ")");
+        logging.debug("Button pressed (Selected Mode: " + String(currentCtrlMode) + ")");
     }
 }
 
@@ -46,7 +46,7 @@ void joyStickMode() {
     JoystickRaw currentPos = getRawJoystick();
     if(currentPos.btn) {
         currentMenuOption = currentCtrlMode;
-        log.debug("Button pressed (Exited Mode: " + String(currentCtrlMode) + ")");
+        logging.debug("Button pressed (Exited Mode: " + String(currentCtrlMode) + ")");
         piep(2);
         currentCtrlMode = OFF;
         updateTCP();
@@ -55,11 +55,11 @@ void joyStickMode() {
         if(currentPos.x > limit_right) {
             piep(1);
             delay(menuWaitingDelay);
-            log.debug("Mode left");
+            logging.debug("Mode left");
         } else if(currentPos.x < limit_left) {
             piep(1);
             delay(menuWaitingDelay);
-            log.debug("Mode right");
+            logging.debug("Mode right");
         }
     }
 }

@@ -14,6 +14,7 @@ uint8_t bt_address[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle Konsole
     conf.begin("config", true);
+    Serial.println("ntwk_cfg");
     Serial.println("udp_target_port: " + String(conf.getInt("udp_target_port", 0)));
     Serial.println("tcp_target_port: " + String(conf.getInt("tcp_target_port", 0)));
     Serial.println("device_name: " + conf.getString("device_name", ""));
@@ -147,13 +148,14 @@ NetworkConfig getWiFiProfiles() {
 
 void outputNetworkProfile(int id) {
     NetworkConfig wifiProfiles = getWiFiProfiles();
+    Serial.println("Name: " + String(wifiProfiles.profiles[id].name));
     Serial.println("SSID: " + String(wifiProfiles.profiles[id].ssid));
     Serial.println("Pass: " + String(wifiProfiles.profiles[id].password));
     Serial.println("IP: " + String(wifiProfiles.profiles[id].IP) + "\n");
 }
 void outputNetworkProfiles() {
     NetworkConfig wifiProfiles = getWiFiProfiles();
-    for (int i = 0; i > 3; i++) {
+    for (int i = 0; i < 3; i++) {
         Serial.println("Profile " + String(i+1) + ": ");
         outputNetworkProfile(i);
     }
@@ -168,29 +170,34 @@ void networkProfileEditor() {
             Serial.println("Invalid Profile ID!");
         } else {
             NetworkProfile profile = wifiProfiles.profiles[id.toInt()-1];
-            Serial.println("Enter SSID (Leave blank to delete)");
+            Serial.println("Enter Profile Name (Leave blank to delete)");
             String value = getSerialInput(true);
             if(value != "ABORTCMD") {
                 if(value == "") {
-                    profile.ssid[0] = '\0';
+                    profile.name[0] = '\0';
                     profile.exists = false;
                     Serial.println("Profile cleared.");
                 } else {
-                    Serial.println("Enter Passphrase: ");
-                    String pass = getSerialInput(true);
-                    if(pass != "ABORTCMD") {
-                        Serial.println("Enter IP Address: ");
-                        String ip = getSerialInput(true);
-                        if(ip != "ABORTCMD") {
-                            value.toCharArray(profile.ssid,33);
-                            profile.exists = true;
-                            pass.toCharArray(profile.password, 65);
-                            ip.toCharArray(profile.IP,16);
-                            wifiProfiles.profiles[id.toInt()-1] = profile;
-                            conf.begin("config", false);
-                            conf.putBytes("ntwk_cfg", &wifiProfiles, sizeof(NetworkConfig));
-                            conf.end();
-                        }
+                    Serial.println("Enter SSID: ");
+                    String ssid = getSerialInput(true);
+                    if(ssid != "ABORTCMD") {
+                        Serial.println("Enter Passphrase: ");
+                        String pass = getSerialInput(true);
+                        if(pass != "ABORTCMD") {
+                            Serial.println("Enter IP Address: ");
+                            String ip = getSerialInput(true);
+                            if(ip != "ABORTCMD") {
+                                value.toCharArray(profile.name,16);
+                                ssid.toCharArray(profile.ssid,33);
+                                profile.exists = true;
+                                pass.toCharArray(profile.password, 65);
+                                ip.toCharArray(profile.IP,16);
+                                wifiProfiles.profiles[id.toInt()-1] = profile;
+                                conf.begin("config", false);
+                                conf.putBytes("ntwk_cfg", &wifiProfiles, sizeof(NetworkConfig));
+                                conf.end();
+                            } else return;
+                        } else return;
                     } else return;
                 }
             } else return;

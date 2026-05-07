@@ -14,6 +14,7 @@ extern int menuWaitingDelay;
 extern uint8_t bt_address[6];
 
 struct NetworkProfile {
+    char name[16];
     char ssid[33];
     char password[65];
     char IP[16];

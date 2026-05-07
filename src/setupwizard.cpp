@@ -15,8 +15,8 @@ ConnectionType credentialHandler() {
     String Profiles[3];
     for (int i = 0; i < 3; i++) {
         NetworkProfile currentProfile = wifiProfiles.profiles[i];
-        if (currentProfile.exists && currentProfile.ssid[0] != '\0') {
-            Profiles[i] = String(currentProfile.ssid);
+        if (currentProfile.exists && currentProfile.name[0] != '\0') {
+            Profiles[i] = String(currentProfile.name);
         } else {
             Profiles[i] = "[EMPTY]";
         }

@@ -344,9 +344,8 @@ void handleDebugCommands(String cmd) {
                     while(true) {
                         JoystickRaw joyStickPos = getRawJoystick();
                         ControlPacket packet = {(uint16_t)joyStickPos.x, (uint16_t)joyStickPos.y };
-                        Serial.print(packet.x);
-                        Serial.print(" ");
-                        Serial.print(packet.y);
+                        Serial.print("X: " + String(packet.x) + " " + String(joyStickPos.x));
+                        Serial.println("Y: " + String(packet.y) + " " + String(joyStickPos.y));
                         sendMovementData(joyStickPos);
                         delay(20);
                         if(Serial.available() > 0) {

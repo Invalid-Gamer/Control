@@ -125,7 +125,7 @@ void sendUDP(String data) {
 }
 
 void sendMovementData(JoystickRaw raw, int currentMode) {
-    ControlPacket packet = {(uint16_t)raw.x, (uint16_t)raw.y, (uint8_t)currentMode };
+    ControlPacket packet = {(uint16_t)raw.x, (uint16_t)raw.y};
     sendUDP(packet);
 }
 

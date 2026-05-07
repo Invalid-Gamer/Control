@@ -13,6 +13,7 @@
 #include <communication.h>
 #include <joystick.h>
 
+Logging logging;
 ConnectionType connectionType;
 OperatingMode currentOpMode;
 ControlMode currentCtrlMode;
@@ -73,9 +74,8 @@ void setup() {
   // LCD Setup
   initDisplay();
   // Lade Preferences
-  loadedConfig = loadConfig();
-  Logging logging(advancedLog);
   logging.info("Loading config");
+  loadedConfig = loadConfig();
   if(!loadedConfig) {troubleshoot(loadConfig, false);}
   connectionType = WIFI;
   connectionEstablished = setupConnection();
@@ -88,7 +88,7 @@ void setup() {
 
 void loop() {
   serialHandler();
-  if (isConnected()) {
+  if (isCommConnected()) {
     if(currentCtrlMode == OFF) {
       joyStickMenu();
     } else {

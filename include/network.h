@@ -1,6 +1,10 @@
 #ifndef network_H
 #define network_H
 #include <communication.h>
+#include <WiFi.h>
+#include <global.h>
+#include <WiFiUdp.h>
+#include <Arduino.h>
 
 class NetworkMgr {
     public:
@@ -28,7 +32,6 @@ class NetworkMgr {
         void _checkTCP();
         void _connectTCP();
 };
-
-extern NetworkMgr network();
+extern NetworkMgr network;
 
 #endif

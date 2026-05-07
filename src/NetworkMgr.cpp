@@ -32,12 +32,12 @@ bool NetworkMgr::begin() {
     return true;
 }
 
-void NetworkMgr_disconnect() {
+void NetworkMgr::disconnect() {
     logging.debug("WiFi disconnected");
     WiFi.disconnect();
 }
 
-String getStatus() {
+String NetworkMgr::getStatus() {
     switch (WiFi.status()) { // KI generiert
         case WL_CONNECTED:  {     
         String info = "Verbunden!";
@@ -56,7 +56,7 @@ String getStatus() {
     }
 }
 
-bool isConnected() {
+bool NetworkMgr::isConnected() {
     if (WiFi.status() == WL_CONNECTED) {
         return true;
     } else {
@@ -64,7 +64,7 @@ bool isConnected() {
     }
 }
 
-String getMacAddress() {
+String NetworkMgr::getMacAddress() {
     return ("Mac Address: " + String(WiFi.macAddress()));
 }
 

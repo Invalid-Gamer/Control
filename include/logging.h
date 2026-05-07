@@ -4,7 +4,7 @@
 
 class Logging {
     public:
-        Logging(bool debugLog) : _debug(debugLog) {}
+        Logging();
         void info(String text);
         void error(String text);
         void debug(String text);

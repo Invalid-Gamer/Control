@@ -7,7 +7,6 @@
 #include <joystick.h>
 #include <network.h>
 
-NetworkMgr network;
 ShellMode currentShellMode;
 
 // Needed Functions
@@ -205,7 +204,7 @@ void handleWiFiCommands(String cmd) {
             Serial.println("Error! Inspect debug log!");
         }
     } else if(cmd == "disconnect") {
-        disconnect();
+        disconnectComm();
         Serial.println("WiFi disconnected.");
     } else if(cmd == "getMacAddr") {
         Serial.println(network.getMacAddress());

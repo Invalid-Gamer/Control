@@ -8,23 +8,24 @@
 NetworkMgr network;
 
 bool setupConnection() {
+    bool success = false;
     if(connectionType == WIFI) {
         showStatus("Verbinde WLAN... ");
-        bool success = network.begin();
+        success = network.begin();
         if(success) showStatus("WLAN Verbunden"); removeStatus(1);
-        return success;
     } else if (connectionType == BLUETOOTH) {
         showStatus("Bluetooth existiert nicht");
         connectionType = WIFI;
-        return false;
+        success = false;
     }
+    return success;
 }
 
-void disconnect() {
+void disconnectComm() {
     if(connectionType == WIFI) {
         network.disconnect();
     } else if(connectionType == BLUETOOTH) {
-        // DUMMY
+        piep(1);
     }
 }
 
@@ -32,26 +33,28 @@ void updateMode() {
     if(connectionType == WIFI) {
         network.updateTCP();
     } else if(connectionType == BLUETOOTH) {
-        // DUMMY
+        piep(1);
     }
 }
 
 String getConnectionStatus() {
+    String answer;
     if(connectionType == WIFI) {
-        String answer = network.getStatus();
-        return answer;
+        answer = network.getStatus();
     } else if(connectionType == BLUETOOTH) {
-        // DUMMY
+        piep(1);
     }
+    return answer;
 }
 
-bool isConnected() {
+bool isCommConnected() {
+    bool answer = false;
     if(connectionType == WIFI) {
-        bool answer = network.isConnected();
-        return answer;
+        answer = network.isConnected();
     } else if(connectionType == BLUETOOTH) {
-        // DUMMY
+        piep(1);
     }
+    return answer;
 }
 
 void sendMovementData(JoystickRaw raw) {

@@ -3,6 +3,8 @@
 #include <config.h>
 #include <bluetooth.h>
 
+BT::BT() {}
+
 BluetoothSerial SerialBT;
 
 bool BT::begin() {

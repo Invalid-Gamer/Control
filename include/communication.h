@@ -11,10 +11,10 @@ struct ControlPacket {// Für wie die Datensätze aufgebaut sein sollten habe ic
 };
 
 bool setupConnection();
-void disconnect();
+void disconnectComm();
 void updateMode();
 String getConnectionStatus();
-bool isConnected();
+bool isCommConnected();
 void sendMovementData(JoystickRaw raw);
 void update();
 

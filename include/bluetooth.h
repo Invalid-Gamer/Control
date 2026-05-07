@@ -3,6 +3,7 @@
 
 class BT {
     public:
+        BT();
         bool begin();
 };
 

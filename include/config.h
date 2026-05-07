@@ -13,6 +13,17 @@ extern String Device_Name; // WiFi Module Name
 extern int menuWaitingDelay;
 extern uint8_t bt_address[6];
 
+struct NetworkProfile {
+    char ssid[33];
+    char password[65];
+    char IP[16];
+};
+
+struct NetworkConfig {
+    NetworkProfile profiles[3];
+    int activeProfiles;
+};
+
 bool loadConfig();
 void outputConfigToSerial();
 bool writeConfig(String key, String value, bool ignoreExistance);

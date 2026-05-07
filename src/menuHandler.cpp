@@ -63,3 +63,11 @@ void joyStickMode() {
         }
     }
 }
+
+ConnectionType credentialHandler() {
+    bool loop = true;
+    while (loop) { 
+        JoystickRaw currentPos = getRawJoystick();
+        
+    }
+}

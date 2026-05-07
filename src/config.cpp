@@ -123,6 +123,7 @@ bool writeConfig(String key, bool value, bool ignoreExistance) {
 }
 
 bool deleteConfig(String key, bool secure) {
+    conf.begin("config", false);
     Serial.println("FINAL CONFIRMATION: WILL BREAK CODE; DONT DO IF NOT DEV (y/n): ");
     String final_confirmation = getSerialInput(true);
     if (final_confirmation == "y") {
@@ -132,4 +133,5 @@ bool deleteConfig(String key, bool secure) {
         Serial.println("Aborting...");
         return false;
     }
+    conf.end();
 }

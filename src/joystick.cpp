@@ -37,7 +37,7 @@ void joyStickMenu() {
     } else if (currentPos.btn) {
         piep(2);
         currentCtrlMode = currentMenuOption;
-        updateTCP();
+        updateMode();
         logging.debug("Button pressed (Selected Mode: " + String(currentCtrlMode) + ")");
     }
 }
@@ -49,7 +49,7 @@ void joyStickMode() {
         logging.debug("Button pressed (Exited Mode: " + String(currentCtrlMode) + ")");
         piep(2);
         currentCtrlMode = OFF;
-        updateTCP();
+        updateMode();
     }
     if(currentCtrlMode == AUTO || currentCtrlMode == INFO) {
         if(currentPos.x > limit_right) {

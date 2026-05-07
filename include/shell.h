@@ -14,7 +14,7 @@ void serialHandler();
 enum ShellMode {
     BASE,
     CONFIG,
-    WIFI,
+    COMM,
     SCREEN,
     DEBUG
 };

@@ -13,13 +13,14 @@
 #include <communication.h>
 #include <joystick.h>
 
+ConnectionType connectionType;
 OperatingMode currentOpMode;
 ControlMode currentCtrlMode;
 ControlMode currentMenuOption = MANUAL;
 
 // Variablen
 bool loadedConfig;
-bool WiFiConnected;
+bool connectionEstablished;
 
 void troubleshoot(void (*callback)(), bool doContinue) {
   Serial.println("Encountered an Error!");
@@ -76,30 +77,31 @@ void setup() {
   Logging logging(advancedLog);
   logging.info("Loading config");
   if(!loadedConfig) {troubleshoot(loadConfig, false);}
-  WiFiConnected = setupWiFi();
-  if(!WiFiConnected){troubleshoot(setupWiFi, false);}
+  connectionType = WIFI;
+  connectionEstablished = setupConnection();
+  if(!connectionEstablished){troubleshoot(setupConnection, false);}
   Serial.println("Setup finished!");
-  showStatus("Setup fertig");
+  showStatus("Setup abgeschlossen");
   removeStatus(1);
   currentOpMode = REGULAR;
 }
 
 void loop() {
   serialHandler();
-  if (isWiFiConnected()) {
+  if (isConnected()) {
     if(currentCtrlMode == OFF) {
       joyStickMenu();
     } else {
       joyStickMode();
-      handleIncomingTCP();
+      update();
     }
     updateDisplay();
     if(currentCtrlMode == MANUAL || currentCtrlMode == HAUTO) {
       JoystickRaw joyStickPos = getRawJoystick();
-      sendMovementData(joyStickPos, (int)currentCtrlMode);
+      sendMovementData(joyStickPos);
     }
   } else {
-    WiFiConnected = setupWiFi();
-    if(!WiFiConnected){troubleshoot(setupWiFi, false);}
+    connectionEstablished = setupConnection();
+    if(!connectionEstablished){troubleshoot(setupConnection, false);}
   }
 }

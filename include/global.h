@@ -14,6 +14,11 @@ extern float battValue;
 extern float lenkungValue;
 
 // Globale Variablen
+enum ConnectionType {
+    WIFI,
+    BLUETOOTH
+};
+
 enum OperatingMode { // Global: Was muss angezeigt werden etc.
     SETUP,
     SHELL,
@@ -28,6 +33,7 @@ enum ControlMode { // Global und für Joystick/Network: Was muss gesendet werden
     INFO
 };
 
+extern ConnectionType connectionType;
 extern OperatingMode currentOpMode;
 extern ControlMode currentCtrlMode;
 extern ControlMode currentMenuOption;

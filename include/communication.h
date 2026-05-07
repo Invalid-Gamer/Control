@@ -10,17 +10,12 @@ struct ControlPacket {// Für wie die Datensätze aufgebaut sein sollten habe ic
     uint16_t y;
 };
 
-bool setupWiFi();
-void disconnectWiFi();
-void updateTCP();
-String getWiFiStatus();
-bool isWiFiConnected();
-String getMacAddress();
-void sendTCP(String type, String value);
-void sendTCP(String type, int value);
-void sendUDP(String data);
-void sendMovementData(JoystickRaw raw, int currentMode);
-void handleIncomingTCP();
-String handleRawTCP();
+bool setupConnection();
+void disconnect();
+void updateMode();
+String getConnectionStatus();
+bool isConnected();
+void sendMovementData(JoystickRaw raw);
+void update();
 
 #endif

@@ -13,6 +13,7 @@ int tcp_Target_Port = 0;
 String Device_Name = "";
 bool advancedLog = false;
 int menuWaitingDelay = 0;
+uint8_t address[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle Konsole
     conf.begin("config", true);

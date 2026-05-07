@@ -5,7 +5,9 @@
 #include <communication.h>
 #include <DisplayMgr.h>
 #include <joystick.h>
+#include <network.h>
 
+NetworkMgr network;
 ShellMode currentShellMode;
 
 // Needed Functions
@@ -42,7 +44,7 @@ void handleBaseCommands(String cmd) {
         currentShellMode = CONFIG;
         Serial.println("Config Shell " + configShellVer);
     } else if (cmd == "wifi") {
-        currentShellMode = WIFI;
+        currentShellMode = COMM;
         Serial.println("WIFI Shell " + WiFiShellVer);
     } else if(cmd == "display") {
         currentShellMode = SCREEN;
@@ -186,27 +188,27 @@ void handleConfigCommands(String cmd) {
 }
 
 //--------------------------------
-//--------------WIFI--------------
+//--------------COMM--------------
 //--------------------------------
 
-// WIFI Shell
+// Communication Shell
 void handleWiFiCommands(String cmd) {
     if(cmd == "help") {
         Serial.println("WiFi Shell Help:\n--To change WiFi Credentials go to config shell!--\nstatus - WiFi Status\nconnect - Connect with WiFi\ndisconnect - Disconnect WiFi\ngetMacAddr - Returns MAC Address\nexit - Return to Standard-Shell");
     } else if(cmd == "status") {
-        Serial.println(getWiFiStatus());
+        Serial.println(network.getStatus());
     } else if(cmd == "connect") {
-        bool Ergebnis = setupWiFi();
+        bool Ergebnis = setupConnection();
         if(Ergebnis) {
             Serial.println("WiFi connected");
         } else {
             Serial.println("Error! Inspect debug log!");
         }
     } else if(cmd == "disconnect") {
-        disconnectWiFi();
+        disconnect();
         Serial.println("WiFi disconnected.");
     } else if(cmd == "getMacAddr") {
-        Serial.println(getMacAddress());
+        Serial.println(network.getMacAddress());
     } else if(cmd == "exit") {
         Serial.println("Resuming to normal shell");
         currentShellMode = BASE;
@@ -281,7 +283,7 @@ void handleDebugCommands(String cmd) {
             if(answer == "Incoming" || answer == "incoming") {
                 Serial.println("Incoming network debug starting in 3 seconds! To exit, type cancel!");
             while(true) {
-                Serial.println(handleRawTCP());
+                Serial.println(network.handleRawTCP());
                 if(Serial.available() > 0) {
                     String input = Serial.readString();
                     input.trim();
@@ -305,7 +307,7 @@ void handleDebugCommands(String cmd) {
                             String value = getSerialInput(true);
                             if(value != "ABORTCMD") {
                                 Serial.println("Sending: " + key + ":" + value);
-                                sendTCP(key,value);
+                                network.sendTCP(key,value);
                             } else {
                                 return;
                             }
@@ -317,7 +319,7 @@ void handleDebugCommands(String cmd) {
                         answer = getSerialInput(true);
                         if(answer != "ABORTCMD") {
                             Serial.println("Sending " + answer);
-                            sendUDP(answer);
+                            network.sendUDP(answer);
                         } else {
                             return;
                         }
@@ -332,13 +334,11 @@ void handleDebugCommands(String cmd) {
                     currentCtrlMode = MANUAL;
                     while(true) {
                         JoystickRaw joyStickPos = getRawJoystick();
-                        ControlPacket packet = {(uint16_t)joyStickPos.x, (uint16_t)joyStickPos.y, (uint8_t)currentCtrlMode };
+                        ControlPacket packet = {(uint16_t)joyStickPos.x, (uint16_t)joyStickPos.y };
                         Serial.print(packet.x);
                         Serial.print(" ");
                         Serial.print(packet.y);
-                        Serial.print(" ");
-                        Serial.println(packet.mode);
-                        sendMovementData(joyStickPos, (int)currentCtrlMode);
+                        sendMovementData(joyStickPos);
                         delay(20);
                         if(Serial.available() > 0) {
                             String input = Serial.readString();
@@ -370,7 +370,7 @@ void handleDebugCommands(String cmd) {
                         Serial.println("Invalid input: " + answer + " Aborting...");
                         return;
                     }
-                    sendTCP("mode",value);
+                    network.sendTCP("mode",value);
                     Serial.println("Sending: mode:" + value);
                 } else if (answer == "exit") {
                     Serial.println("Exiting to Debug shell");
@@ -399,7 +399,7 @@ void printShellChar() {
         Serial.print("$ ");
     } else if(currentShellMode == CONFIG) {
         Serial.print("Config $ ");
-    } else if(currentShellMode == WIFI) {
+    } else if(currentShellMode == COMM) {
         Serial.print("WiFi $ ");
     } else if(currentShellMode == SCREEN) {
         Serial.print("Display $ ");
@@ -423,7 +423,7 @@ void shell() {
             handleBaseCommands(shellInput);
         } else if(currentShellMode == CONFIG) {
             handleConfigCommands(shellInput);
-        } else if(currentShellMode == WIFI) {
+        } else if(currentShellMode == COMM) {
             handleWiFiCommands(shellInput);
         } else if(currentShellMode == SCREEN) {
             handleDisplayCommands(shellInput);

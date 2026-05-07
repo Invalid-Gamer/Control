@@ -11,6 +11,7 @@ extern int udp_Target_Port; // Captain UDP Target Port
 extern int tcp_Target_Port; // Captain TCP Target Port
 extern String Device_Name; // WiFi Module Name
 extern int menuWaitingDelay;
+extern uint8_t bt_address[6];
 
 bool loadConfig();
 void outputConfigToSerial();

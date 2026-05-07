@@ -5,21 +5,15 @@
 #include <joystick.h>
 
 Preferences conf;
-String WiFi_SSID = "";
-String WiFi_Pass = "";
-String Target_IP = "";
 int udp_Target_Port = 0;
 int tcp_Target_Port = 0;
 String Device_Name = "";
 bool advancedLog = false;
 int menuWaitingDelay = 0;
-uint8_t address[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t bt_address[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle Konsole
     conf.begin("config", true);
-    Serial.println("wifi_ssid: " + conf.getString("wifi_ssid", ""));
-    Serial.println("wifi_pass: " + conf.getString("wifi_pass", ""));
-    Serial.println("target_ip: " + conf.getString("target_ip", ""));
     Serial.println("udp_target_port: " + String(conf.getInt("udp_target_port", 0)));
     Serial.println("tcp_target_port: " + String(conf.getInt("tcp_target_port", 0)));
     Serial.println("device_name: " + conf.getString("device_name", ""));
@@ -31,9 +25,6 @@ void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle 
 bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, weitermachen; false = Fehler, Programm stoppen, debug
     logging.debug("Started config load");
     conf.begin("config", true);
-    WiFi_SSID = conf.getString("wifi_ssid", "");
-    WiFi_Pass = conf.getString("wifi_pass", "");
-    Target_IP = conf.getString("target_ip", "");
     udp_Target_Port = conf.getInt("udp_target_port", 0);
     tcp_Target_Port = conf.getInt("tcp_target_port", 0);
     Device_Name = conf.getString("device_name", "");
@@ -42,13 +33,9 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
     conf.end();
     logging.debug("Loaded config. Current config: ");
     if(advancedLog){outputConfigToSerial();}
-    if (WiFi_SSID == "" || WiFi_Pass == "") {
-        // Debug, Warnen dass WiFi nicht vorhanden, Programm stoppen, auf Display anzeigen.
-        logging.error("WiFi SSID/Pass nicht vorhanden!");
-        return false;
-    } else if (Target_IP == "" || udp_Target_Port == 0 || tcp_Target_Port == 0) {
+    if (udp_Target_Port == 0 || tcp_Target_Port == 0) {
         // Debug, Warnen dass kein Target vorhanden, Programm stoppen, auf Display anzeigen.
-        logging.error("Target IP/Port nicht vorhanden!");
+        logging.error("Target Port nicht vorhanden!");
         return false;
     } else if (Device_Name == "" || menuWaitingDelay == 0) {
         // Auf Display warnen, fortfahren mit Standard-Namen
@@ -134,4 +121,79 @@ bool deleteConfig(String key, bool secure) {
         return false;
     }
     conf.end();
+}
+
+NetworkConfig getWiFiProfiles() {
+    NetworkConfig config;
+    conf.begin("config", true);
+    size_t readBytes = conf.getBytes("ntwk_cfg", &config, sizeof(NetworkConfig));
+    conf.end();
+    if(readBytes == 0) {
+        for(int i = 0; i < 3; i++) {
+            config.profiles[i].exists = false;
+        }
+        config.activeProfiles = 0;
+    } else {
+        int profileCounter = 0;
+        for (int i = 0; i < 3; i++) {
+            if (config.profiles[i].exists) {
+                profileCounter += 1;
+            }
+        }
+        config.activeProfiles = profileCounter;
+    }
+    return config;
+}
+
+void outputNetworkProfile(int id) {
+    NetworkConfig wifiProfiles = getWiFiProfiles();
+    Serial.println("SSID: " + String(wifiProfiles.profiles[id].ssid));
+    Serial.println("Pass: " + String(wifiProfiles.profiles[id].password));
+    Serial.println("IP: " + String(wifiProfiles.profiles[id].IP) + "\n");
+}
+void outputNetworkProfiles() {
+    NetworkConfig wifiProfiles = getWiFiProfiles();
+    for (int i = 0; i > 3; i++) {
+        Serial.println("Profile " + String(i+1) + ": ");
+        outputNetworkProfile(i);
+    }
+}
+
+void networkProfileEditor() {
+    Serial.println("Choose 1 of the profiles you want to edit (1/2/3): ");
+    String id = getSerialInput(true);
+    NetworkConfig wifiProfiles = getWiFiProfiles();
+    if(id != "ABORTCMD") {
+        if(id.toInt() != 1 && id.toInt() != 2 && id.toInt() != 3) {
+            Serial.println("Invalid Profile ID!");
+        } else {
+            NetworkProfile profile = wifiProfiles.profiles[id.toInt()-1];
+            Serial.println("Enter SSID (Leave blank to delete)");
+            String value = getSerialInput(true);
+            if(value != "ABORTCMD") {
+                if(value == "") {
+                    profile.ssid[0] = '\0';
+                    profile.exists = false;
+                    Serial.println("Profile cleared.");
+                } else {
+                    Serial.println("Enter Passphrase: ");
+                    String pass = getSerialInput(true);
+                    if(pass != "ABORTCMD") {
+                        Serial.println("Enter IP Address: ");
+                        String ip = getSerialInput(true);
+                        if(ip != "ABORTCMD") {
+                            value.toCharArray(profile.ssid,33);
+                            profile.exists = true;
+                            pass.toCharArray(profile.password, 65);
+                            ip.toCharArray(profile.IP,16);
+                            wifiProfiles.profiles[id.toInt()-1] = profile;
+                            conf.begin("config", false);
+                            conf.putBytes("ntwk_cfg", &wifiProfiles, sizeof(NetworkConfig));
+                            conf.end();
+                        }
+                    } else return;
+                }
+            } else return;
+        }
+    } else return;
 }

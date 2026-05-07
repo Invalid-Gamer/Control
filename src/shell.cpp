@@ -193,7 +193,17 @@ void handleConfigCommands(String cmd) {
 // Communication Shell
 void handleWiFiCommands(String cmd) {
     if(cmd == "help") {
-        Serial.println("WiFi Shell Help:\n--To change WiFi Credentials go to config shell!--\nstatus - WiFi Status\nconnect - Connect with WiFi\ndisconnect - Disconnect WiFi\ngetMacAddr - Returns MAC Address\nexit - Return to Standard-Shell");
+        Serial.println("WiFi Shell Help:\nprofiles - Manage WiFi Profiles\nstatus - WiFi Status\nconnect - Connect with WiFi\ndisconnect - Disconnect WiFi\ngetMacAddr - Returns MAC Address\nexit - Return to Standard-Shell");
+    } else if(cmd == "profiles") {
+        Serial.println("Profile Management\nlist - List all Profiles\nedit - Edit a profile (ADD/DELETE)");
+        String value = getSerialInput(true);
+        if(value != "ABORTCMD") {
+            if(value == "list") {
+                outputNetworkProfiles();
+            } else if(value == "edit") {
+                networkProfileEditor();
+            }
+        }
     } else if(cmd == "status") {
         Serial.println(network.getStatus());
     } else if(cmd == "connect") {

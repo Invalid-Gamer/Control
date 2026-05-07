@@ -2,6 +2,7 @@
 #define JOYSTICK_H
 
 #include <Arduino.h>
+#include <global.h>
 
 const int limit_left = 1000;
 const int limit_right = 2600;
@@ -15,5 +16,6 @@ struct JoystickRaw {
 JoystickRaw getRawJoystick();
 void joyStickMenu();
 void joyStickMode();
+ConnectionType credentialHandler();
 
 #endif

@@ -77,7 +77,7 @@ void setup() {
   logging.info("Loading config");
   loadedConfig = loadConfig();
   if(!loadedConfig) {troubleshoot(loadConfig, false);}
-  connectionType = WIFI;
+  connectionType = credentialHandler();
   connectionEstablished = setupConnection();
   if(!connectionEstablished){troubleshoot(setupConnection, false);}
   Serial.println("Setup finished!");

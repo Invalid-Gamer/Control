@@ -151,3 +151,26 @@ void displaySetBacklight(bool value) {
 void clearDisplay() {
     lcd.clear();
 }
+
+void showCustomMenu(CustomMenu menu) {
+    if(menu.title.length() > 16) {
+        menu.title = menu.title.substring(0,16);
+    }
+    if(menu.value.length() > 16) {
+        menu.value = menu.value.substring(0,16);
+    }
+    if(menu.title.length() < 16) {
+        for(int i = 0; menu.title.length()<16; i++) {
+            menu.title += " ";
+        }
+    }
+    if (menu.value.length() < 16) {
+        for (int i = 0; menu.value.length()<16; i++) {
+            menu.value += " ";
+        }
+    }
+    lcd.setCursor(1,0);
+    lcd.print(menu.title);
+    lcd.setCursor(0,1);
+    lcd.print(menu.value);
+}

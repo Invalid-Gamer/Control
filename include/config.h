@@ -17,6 +17,7 @@ struct NetworkProfile {
     char ssid[33];
     char password[65];
     char IP[16];
+    bool exists;
 };
 
 struct NetworkConfig {
@@ -31,5 +32,9 @@ bool writeConfig(String key, int value, bool ignoreExistance);
 bool writeConfig(String key, bool value, bool ignoreExistance);
 bool deleteConfig(String key, bool secure);
 String getSerialInput(bool timeout);
+NetworkConfig getWiFiProfiles();
+void outputNetworkProfile(int id);
+void outputNetworkProfiles();
+void networkProfileEditor();
 
 #endif

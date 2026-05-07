@@ -48,7 +48,7 @@ void changeBottomDisplay(String content) {
 
 void updateDisplay() {
     if(stayUntil  > millis()||statusDisplaying){
-        log("Update Display: Passive because of showStatus." + String(stayUntil));
+        log.debug("Update Display: Passive because of showStatus." + String(stayUntil));
         return;
     }
     String text;

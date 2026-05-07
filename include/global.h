@@ -1,5 +1,8 @@
-#ifndef PINS_H
-#define PINS_H
+#ifndef GLOBAL_H
+#define GLOBAL_H
+
+#include <logging.h>
+extern Logging log();
 
 // Pin Belegungen
 const int Btn_Pin = 25; // Button vom Joystick
@@ -30,7 +33,6 @@ extern ControlMode currentCtrlMode;
 extern ControlMode currentMenuOption;
 
 // Globale Funktionen
-void log(String text);
 void piep(int amount);
 void troubleshoot(void (*callback()), bool doContinue);
 void troubleshoot(bool (*callback()), bool doContinue);

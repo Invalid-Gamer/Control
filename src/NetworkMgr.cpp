@@ -1,0 +1,148 @@
+#include <global.h>
+#include <network.h>
+#include <WiFi.h>
+#include <WiFiUdp.h>
+#include <joystick.h>
+#include <config.h>
+#include <DisplayMgr.h>
+#include <communication.h>
+
+NetworkMgr::NetworkMgr() {}
+
+float battValue = 0;
+float lenkungValue = 0;
+
+
+bool NetworkMgr::begin() {
+    WiFi.setHostname(Device_Name.c_str());
+    logging.debug("WiFi: Using Credentials: "); logging.debug("SSID:" + WiFi_SSID + "; Pass: " + WiFi_Pass + "; Current Hostname: " + String(WiFi.getHostname()));
+    WiFi.begin(WiFi_SSID.c_str(),WiFi_Pass.c_str());
+
+    unsigned long start = millis();
+    logging.debug("Waiting for connection at: " + String(start));
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(100);
+        if(millis() - start > 20000) {
+            logging.error("WiFi Connection timed out!"); logging.error("Waited for: " + String(millis() - start));
+            return false;
+        }
+    }
+
+    logging.debug("WiFi connected. IP: " + WiFi.localIP().toString());
+    return true;
+}
+
+void NetworkMgr::disconnect() {
+    logging.debug("WiFi disconnected");
+    WiFi.disconnect();
+}
+
+String NetworkMgr::getStatus() {
+    switch (WiFi.status()) { // KI generiert
+        case WL_CONNECTED:  {     
+        String info = "Verbunden!";
+        info += "\n SSID: " + WiFi.SSID();
+        info += "\n IP: " + WiFi.localIP().toString();
+        info += "\n Signal: " + String(WiFi.RSSI()) + "dBm";
+        info += "\n Hostname: " + String(WiFi.getHostname());
+        info += "\n Mac Address: " + String(WiFi.macAddress());
+        return info;
+        }
+        case WL_NO_SSID_AVAIL:   return "SSID nicht gefunden (WL_NO_SSID_AVAIL)";
+        case WL_CONNECT_FAILED:  return "Verbindung fehlgeschlagen (WL_CONNECT_FAILED)";
+        case WL_IDLE_STATUS:     return "Leerlauf (WL_IDLE_STATUS)";
+        case WL_DISCONNECTED:    return "Getrennt (WL_DISCONNECTED)";
+        default:                 return "Unbekannter Status (" + String(WiFi.status()) + ")";
+    }
+}
+
+bool NetworkMgr::isConnected() {
+    if (WiFi.status() == WL_CONNECTED) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+String NetworkMgr::getMacAddress() {
+    return ("Mac Address: " + String(WiFi.macAddress()));
+}
+
+void NetworkMgr::_connectTCP() {
+    logging.debug("Baue TCP Verbindung auf");
+    _tcp.connect(Target_IP.c_str(), tcp_Target_Port);
+    unsigned long start = millis();
+    while(!_tcp.connected()) {
+        delay(10);
+        if(millis() - start > 5000) {
+            Serial.println("Unable to connect TCP! Aborting...");
+            return;
+        }
+    }
+}
+
+void NetworkMgr::_checkTCP() {
+    if(!_tcp.connected()) {
+        _connectTCP();
+    }
+    if(!_tcp.connected()) {
+        currentCtrlMode = OFF;
+    }
+}
+
+void NetworkMgr::sendTCP(String type, String value) {
+    _checkTCP();
+    _tcp.println(type + ":" + value);
+    logging.debug("Sende TCP. type: " + type + "; value: " + value);
+}
+
+void NetworkMgr::sendTCP(String type, int value) {
+    _checkTCP();
+    _tcp.println(type + ":" + value);
+    logging.debug("Sending TCP. type: " + type + "; value: " + value);
+}
+
+void NetworkMgr::updateTCP() {
+    sendTCP("mode",currentCtrlMode);
+}
+
+void NetworkMgr::sendUDP(ControlPacket packet) {
+    _udp.beginPacket(Target_IP.c_str(),udp_Target_Port);
+    _udp.write((uint8_t*)&packet, sizeof(packet));
+    _udp.endPacket();
+}
+
+void NetworkMgr::sendUDP(String value) {
+    _udp.beginPacket(Target_IP.c_str(),udp_Target_Port);
+    _udp.write((uint8_t*)&value, sizeof(value));
+    _udp.endPacket();
+}
+void NetworkMgr::sendMovement(JoystickRaw raw) {
+    ControlPacket packet = {(uint16_t)raw.x, (uint16_t)raw.y};
+    sendUDP(packet);
+}
+
+void NetworkMgr::handleIncomingTCP() {
+    _checkTCP();
+    while(_tcp.available()) {
+        String line = _tcp.readStringUntil('\n');
+        line.trim();
+        if(line.startsWith("BATT:")) {
+            battValue = line.substring(5).toFloat();
+            logging.debug("Received BATT: " + String(battValue));
+        } else if (line.startsWith("LENK:")) {
+            lenkungValue = line.substring(5).toFloat();
+            logging.debug("Received LENK: " + String(lenkungValue));
+        }
+    }
+}
+
+String NetworkMgr::handleRawTCP() {
+    String line = "No TCP available.";
+    _checkTCP();
+    if(_tcp.available()) {
+        line = _tcp.readString();
+        line.trim();
+    }
+    return line;
+}

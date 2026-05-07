@@ -8,20 +8,14 @@ extern unsigned long lastUdp;
 struct ControlPacket {// Für wie die Datensätze aufgebaut sein sollten habe ich KI benutzt.
     uint16_t x;
     uint16_t y;
-    uint8_t mode;
 };
 
-bool setupWiFi();
-void disconnectWiFi();
-void updateTCP();
-String getWiFiStatus();
-bool isWiFiConnected();
-String getMacAddress();
-void sendTCP(String type, String value);
-void sendTCP(String type, int value);
-void sendUDP(String data);
-void sendMovementData(JoystickRaw raw, int currentMode);
-void handleIncomingTCP();
-String handleRawTCP();
+bool setupConnection();
+void disconnectComm();
+void updateMode();
+String getConnectionStatus();
+bool isCommConnected();
+void sendMovementData(JoystickRaw raw);
+void update();
 
 #endif

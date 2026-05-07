@@ -1,5 +1,8 @@
-#ifndef PINS_H
-#define PINS_H
+#ifndef GLOBAL_H
+#define GLOBAL_H
+
+#include <logging.h>
+extern Logging logging;
 
 // Pin Belegungen
 const int Btn_Pin = 25; // Button vom Joystick
@@ -11,6 +14,11 @@ extern float battValue;
 extern float lenkungValue;
 
 // Globale Variablen
+enum ConnectionType {
+    WIFI,
+    BLUETOOTH
+};
+
 enum OperatingMode { // Global: Was muss angezeigt werden etc.
     SETUP,
     SHELL,
@@ -25,12 +33,20 @@ enum ControlMode { // Global und für Joystick/Network: Was muss gesendet werden
     INFO
 };
 
+enum MenuOption {
+    M_MANUAL,
+    M_HAUTO,
+    M_AUTO,
+    M_INFO,
+    M_SETTINGS
+};
+
+extern ConnectionType connectionType;
 extern OperatingMode currentOpMode;
 extern ControlMode currentCtrlMode;
-extern ControlMode currentMenuOption;
+extern MenuOption currentMenuOption;
 
 // Globale Funktionen
-void log(String text);
 void piep(int amount);
 void troubleshoot(void (*callback()), bool doContinue);
 void troubleshoot(bool (*callback()), bool doContinue);

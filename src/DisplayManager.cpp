@@ -66,20 +66,20 @@ void updateDisplay() {
                 case OFF:
                     displayTitle();
                     switch(currentMenuOption) {
-                        case OFF:
-                            changeBottomDisplay("");
-                            break;
-                        case MANUAL:
+                        case M_MANUAL:
                             changeBottomDisplay("Manuell");
                             break;
-                        case HAUTO:
+                        case M_HAUTO:
                             changeBottomDisplay("Halb-Automatik");
                             break;
-                        case AUTO:
+                        case M_AUTO:
                             changeBottomDisplay("Automatik");
                             break;
-                        case INFO:
+                        case M_INFO:
                             changeBottomDisplay("Informationen");
+                            break;
+                        case M_SETTINGS:
+                            changeBottomDisplay("Settings");
                             break;
                     }
                     break;

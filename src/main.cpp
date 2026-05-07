@@ -17,7 +17,7 @@ Logging logging;
 ConnectionType connectionType;
 OperatingMode currentOpMode;
 ControlMode currentCtrlMode;
-ControlMode currentMenuOption = MANUAL;
+MenuOption currentMenuOption = M_MANUAL;
 
 // Variablen
 bool loadedConfig;

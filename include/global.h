@@ -33,10 +33,18 @@ enum ControlMode { // Global und für Joystick/Network: Was muss gesendet werden
     INFO
 };
 
+enum MenuOption {
+    M_MANUAL,
+    M_HAUTO,
+    M_AUTO,
+    M_INFO,
+    M_SETTINGS
+};
+
 extern ConnectionType connectionType;
 extern OperatingMode currentOpMode;
 extern ControlMode currentCtrlMode;
-extern ControlMode currentMenuOption;
+extern MenuOption currentMenuOption;
 
 // Globale Funktionen
 void piep(int amount);

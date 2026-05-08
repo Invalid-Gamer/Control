@@ -3,6 +3,7 @@
 #include <config.h>
 #include <global.h>
 #include <joystick.h>
+#include <shell.h>
 
 Preferences conf;
 int udp_Target_Port = 0;
@@ -124,37 +125,46 @@ bool deleteConfig(String key, bool secure) {
     conf.end();
 }
 
-NetworkConfig getWiFiProfiles() {
+NetworkConfig getWiFiProfiles(bool checkIfExists) {
     NetworkConfig config;
     conf.begin("config", true);
-    size_t readBytes = conf.getBytes("ntwk_cfg", &config, sizeof(NetworkConfig));
-    conf.end();
-    if(readBytes == 0) {
-        for(int i = 0; i < 3; i++) {
-            config.profiles[i].exists = false;
-        }
-        config.activeProfiles = 0;
+    if(!conf.isKey("ntwk_cfg") && checkIfExists) {
+        logging.error("No Network config found! Please configure in WiFi Shell...");
+        currentShellMode = COMM;
+        shell();
+    }
+    if(!conf.isKey("ntwk_cfg") && checkIfExists) {
+        logging.error("No Network configured, still cant find networkConfig! Cant resume! Entering shell!");
     } else {
-        int profileCounter = 0;
-        for (int i = 0; i < 3; i++) {
-            if (config.profiles[i].exists) {
-                profileCounter += 1;
+        size_t readBytes = conf.getBytes("ntwk_cfg", &config, sizeof(NetworkConfig));
+        conf.end();
+        if(readBytes == 0) {
+            for(int i = 0; i < 3; i++) {
+                config.profiles[i].exists = false;
             }
+            config.activeProfiles = 0;
+        } else {
+            int profileCounter = 0;
+            for (int i = 0; i < 3; i++) {
+                if (config.profiles[i].exists) {
+                    profileCounter += 1;
+                }
+            }
+            config.activeProfiles = profileCounter;
         }
-        config.activeProfiles = profileCounter;
     }
     return config;
 }
 
 void outputNetworkProfile(int id) {
-    NetworkConfig wifiProfiles = getWiFiProfiles();
+    NetworkConfig wifiProfiles = getWiFiProfiles(false);
     Serial.println("Name: " + String(wifiProfiles.profiles[id].name));
     Serial.println("SSID: " + String(wifiProfiles.profiles[id].ssid));
     Serial.println("Pass: " + String(wifiProfiles.profiles[id].password));
     Serial.println("IP: " + String(wifiProfiles.profiles[id].IP) + "\n");
 }
 void outputNetworkProfiles() {
-    NetworkConfig wifiProfiles = getWiFiProfiles();
+    NetworkConfig wifiProfiles = getWiFiProfiles(false);
     for (int i = 0; i < 3; i++) {
         Serial.println("Profile " + String(i+1) + ": ");
         outputNetworkProfile(i);
@@ -164,7 +174,7 @@ void outputNetworkProfiles() {
 void networkProfileEditor() {
     Serial.println("Choose 1 of the profiles you want to edit (1/2/3): ");
     String id = getSerialInput(true);
-    NetworkConfig wifiProfiles = getWiFiProfiles();
+    NetworkConfig wifiProfiles = getWiFiProfiles(false);
     if(id != "ABORTCMD") {
         if(id.toInt() != 1 && id.toInt() != 2 && id.toInt() != 3) {
             Serial.println("Invalid Profile ID!");

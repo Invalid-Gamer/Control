@@ -1,3 +1,4 @@
+# KI generiertes Dokument! Nur zu Testzwecken
 import socket
 import struct
 import threading
@@ -60,7 +61,7 @@ def udp_server():
                 data_display["udp_count_total"] += 1
                 _udp_counter_temp += 1
             
-            # Dein Output zeigt 4 Bytes -> <HH (2x uint16)
+            # 4 Bytes -> <HH (2x uint16)
             if len(data) >= 4:
                 x, y = struct.unpack('<HH', data[:4])
                 data_display["udp_x"] = x
@@ -103,17 +104,31 @@ def tcp_handler():
         data_display["tcp_conn"] = "Getrennt / Warte..."
 
 def sender_thread():
+    """
+    Diese Funktion sendet Daten im Format, das die C++ Funktion 'handleIncomingTCP' 
+    erwartet: 'BATT:value\\n' oder 'LENK:value\\n'
+    """
+    global active_tcp_conn
     while True:
         if active_tcp_conn:
             try:
+                # Beispiel: Abwechselnd Batterie und Lenkung senden
                 batt = round(random.uniform(3.5, 4.2), 2)
-                val = random.randint(0, 100)
-                msg = f"DATA:{batt}|{val}\n"
-                active_tcp_conn.sendall(msg.encode())
-                data_display["tcp_last_msg_sent"] = f"{batt}V, {val}%"
+                lenk = round(random.uniform(0.0, 2.4), 2)
+                
+                # Formatierung gemäß C++: startsWith("BATT:") und readStringUntil('\n')
+                msg_batt = f"BATT:{batt}\n"
+                active_tcp_conn.sendall(msg_batt.encode())
+                
+                time.sleep(0.1) # Kurze Pause zwischen Paketen
+                
+                msg_lenk = f"LENK:{lenk}\n"
+                active_tcp_conn.sendall(msg_lenk.encode())
+                
+                data_display["tcp_last_msg_sent"] = f"B:{batt}V, L:{lenk}"
             except:
-                pass
-        time.sleep(0.25)
+                active_tcp_conn = None
+        time.sleep(0.5)
 
 # Threads starten
 threading.Thread(target=udp_server, daemon=True).start()

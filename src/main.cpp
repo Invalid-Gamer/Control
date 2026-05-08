@@ -80,7 +80,7 @@ void setup() {
   connectionType = credentialHandler();
   connectionEstablished = setupConnection();
   if(!connectionEstablished){troubleshoot(setupConnection, false);}
-  Serial.println("Setup finished!");
+  logging.info("Setup finished!");
   showStatus("Setup abgeschlossen");
   removeStatus(1);
   currentOpMode = REGULAR;

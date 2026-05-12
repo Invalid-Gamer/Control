@@ -19,3 +19,6 @@ Außerdem ist die Fernbedienung mit einer eigenen Debug Shell ausgestattet.
     * menuHandler.cpp: Steuerung; Joystick eingabe, Aktionsverarbeitung
     * global.h: Globale Variablen/Funktionen
     * setupwizard.cpp: Setup Menü (WIFI/Bluetooth auswählen, Netzwerkprofil auswählen)
+
+* Verkabelung:
+[Control Verkabelung](Control_Verkabelung.png)

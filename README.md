@@ -5,7 +5,7 @@ Work in Progress
     * shell: Add quit command to exit shell from everywhere
 
 ## Dokumentation:
-Dieser Code gehört zu einer ESP 32-Fernbedienung um ein (Auto)[https://github.com/P5-Natascha/Captain] zu steuern.
+Dieser Code gehört zu einer ESP 32-Fernbedienung um ein [Auto](https://github.com/P5-Natascha/Captain) zu steuern.
 Außerdem ist die Fernbedienung mit einer eigenen Debug Shell ausgestattet.
 
 * Aufbau:

@@ -169,7 +169,7 @@ void showCustomMenu(CustomMenu menu) {
             menu.value += " ";
         }
     }
-    lcd.setCursor(1,0);
+    lcd.setCursor(0,0);
     lcd.print(menu.title);
     lcd.setCursor(0,1);
     lcd.print(menu.value);

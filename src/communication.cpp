@@ -7,7 +7,9 @@
 
 NetworkMgr network;
 
-bool setupConnection() {
+// Differenziert zwischen WIFI und Bluetooth, erhält dabei Code Integrität
+
+bool setupConnection() { // Verbindung herstellen
     bool success = false;
     if(connectionType == WIFI) {
         showStatus("Verbinde WLAN... ");
@@ -29,7 +31,7 @@ void disconnectComm() {
     }
 }
 
-void updateMode() {
+void updateMode() { // Mode an Auto senden
     if(connectionType == WIFI) {
         network.updateTCP();
     } else if(connectionType == BLUETOOTH) {
@@ -37,7 +39,7 @@ void updateMode() {
     }
 }
 
-String getConnectionStatus() {
+String getConnectionStatus() { // Detaillierter Verbindungsstatus im String
     String answer;
     if(connectionType == WIFI) {
         answer = network.getStatus();
@@ -47,7 +49,7 @@ String getConnectionStatus() {
     return answer;
 }
 
-bool isCommConnected() {
+bool isCommConnected() { // Gibt Verbindungsaktivität in Boolean wieder
     bool answer = false;
     if(connectionType == WIFI) {
         answer = network.isConnected();
@@ -65,7 +67,7 @@ void sendMovementData(JoystickRaw raw) {
     }
 }
 
-void update() {
+void update() { // Sensordaten vom Auto empfangen
     if(connectionType == WIFI) {
         network.handleIncomingTCP();
     } else if(connectionType == BLUETOOTH) {

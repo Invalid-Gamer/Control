@@ -4,7 +4,7 @@
 #include <communication.h>
 #include <config.h>
 
-JoystickRaw getRawJoystick() {
+JoystickRaw getRawJoystick() { // Globale FUnktion für Joystick auslesen
     JoystickRaw data;
     data.x = analogRead(Vrx_Pin);
     data.y = analogRead(Vry_Pin);
@@ -12,7 +12,7 @@ JoystickRaw getRawJoystick() {
     return data;
 }
 
-void joyStickMenu() {
+void joyStickMenu() { // Hauptmenü
     JoystickRaw currentPos = getRawJoystick();
     if(currentPos.x > limit_right) {
         if(currentMenuOption == M_SETTINGS) {
@@ -46,7 +46,7 @@ void joyStickMenu() {
     }
 }
 
-void joyStickMode() {
+void joyStickMode() { // Joystick Optionen während aktiven Modi
     JoystickRaw currentPos = getRawJoystick();
     if(currentPos.btn) {
         logging.debug("Button pressed (Exited Mode: " + String(currentCtrlMode) + ")");

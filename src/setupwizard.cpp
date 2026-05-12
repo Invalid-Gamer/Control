@@ -11,7 +11,7 @@ String Target_IP = "";
 
 ConnectionType credentialHandler() {
     int currentChoice = 0;
-    NetworkConfig wifiProfiles = getWiFiProfiles();
+    NetworkConfig wifiProfiles = getWiFiProfiles(true);
     String Profiles[3];
     for (int i = 0; i < 3; i++) {
         NetworkProfile currentProfile = wifiProfiles.profiles[i];

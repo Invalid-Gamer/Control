@@ -8,9 +8,6 @@ class Logging {
         void info(String text);
         void error(String text);
         void debug(String text);
-
-    private:
-        bool _debug;
 };
 
 #endif

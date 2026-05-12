@@ -13,11 +13,11 @@
 #include <communication.h>
 #include <joystick.h>
 
-Logging logging;
-ConnectionType connectionType;
-OperatingMode currentOpMode;
-ControlMode currentCtrlMode;
-MenuOption currentMenuOption = M_MANUAL;
+Logging logging; // Globale logging Instanz
+ConnectionType connectionType; // WIFI / BLUETOOTH
+OperatingMode currentOpMode; // OFF,MANUAL,HAUTO,AUTO,INFO
+ControlMode currentCtrlMode; // SETUP, REGULAR, SHELL
+MenuOption currentMenuOption = M_MANUAL; // Hauptmenü
 
 // Variablen
 bool loadedConfig;
@@ -77,17 +77,18 @@ void setup() {
   logging.info("Loading config");
   loadedConfig = loadConfig();
   if(!loadedConfig) {troubleshoot(loadConfig, false);}
+  // Credential Handler: BT/WIFI, Welches Netzwerkprofil?
   connectionType = credentialHandler();
   connectionEstablished = setupConnection();
   if(!connectionEstablished){troubleshoot(setupConnection, false);}
-  Serial.println("Setup finished!");
+  logging.info("Setup finished!");
   showStatus("Setup abgeschlossen");
   removeStatus(1);
   currentOpMode = REGULAR;
 }
 
 void loop() {
-  serialHandler();
+  serialHandler(); // Sucht nach "shell" in Serial
   if (isCommConnected()) {
     if(currentCtrlMode == OFF) {
       joyStickMenu();

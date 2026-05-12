@@ -13,7 +13,7 @@ float battValue = 0;
 float lenkungValue = 0;
 
 
-bool NetworkMgr::begin() {
+bool NetworkMgr::begin() { // Verbindung herstellen
     WiFi.setHostname(Device_Name.c_str());
     logging.debug("WiFi: Using Credentials: "); logging.debug("SSID:" + WiFi_SSID + "; Pass: " + WiFi_Pass + "; Current Hostname: " + String(WiFi.getHostname()));
     WiFi.begin(WiFi_SSID.c_str(),WiFi_Pass.c_str());
@@ -37,8 +37,8 @@ void NetworkMgr::disconnect() {
     WiFi.disconnect();
 }
 
-String NetworkMgr::getStatus() {
-    switch (WiFi.status()) { // KI generiert
+String NetworkMgr::getStatus() { // Detaillierter Status im STring wird zurückgegeben 
+    switch (WiFi.status()) { 
         case WL_CONNECTED:  {     
         String info = "Verbunden!";
         info += "\n SSID: " + WiFi.SSID();
@@ -56,7 +56,7 @@ String NetworkMgr::getStatus() {
     }
 }
 
-bool NetworkMgr::isConnected() {
+bool NetworkMgr::isConnected() { // Verbindungsaktivität wird in boolean zurückgegeben
     if (WiFi.status() == WL_CONNECTED) {
         return true;
     } else {
@@ -102,7 +102,7 @@ void NetworkMgr::sendTCP(String type, int value) {
     logging.debug("Sending TCP. type: " + type + "; value: " + value);
 }
 
-void NetworkMgr::updateTCP() {
+void NetworkMgr::updateTCP() { // An Empfänger den aktuellen Modus senden
     sendTCP("mode",currentCtrlMode);
 }
 
@@ -122,7 +122,7 @@ void NetworkMgr::sendMovement(JoystickRaw raw) {
     sendUDP(packet);
 }
 
-void NetworkMgr::handleIncomingTCP() {
+void NetworkMgr::handleIncomingTCP() { // Sensordaten vom Auto
     _checkTCP();
     while(_tcp.available()) {
         String line = _tcp.readStringUntil('\n');

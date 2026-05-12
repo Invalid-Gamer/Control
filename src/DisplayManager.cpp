@@ -46,7 +46,7 @@ void changeBottomDisplay(String content) {
     lcd.print(content);
 }
 
-void updateDisplay() {
+void updateDisplay() { // Alle Menüs
     if(stayUntil  > millis()||statusDisplaying){
         logging.debug("Update Display: Passive because of showStatus." + String(stayUntil));
         return;
@@ -112,7 +112,7 @@ void updateDisplay() {
     }
 }
 
-void showStatus(String content) {
+void showStatus(String content) { // Temporärer Statustext
     lcd.clear();
     lcd.setCursor(0,0);
     String line1 = "";
@@ -169,7 +169,7 @@ void showCustomMenu(CustomMenu menu) {
             menu.value += " ";
         }
     }
-    lcd.setCursor(1,0);
+    lcd.setCursor(0,0);
     lcd.print(menu.title);
     lcd.setCursor(0,1);
     lcd.print(menu.value);

@@ -12,7 +12,10 @@ Außerdem ist die Fernbedienung mit einer eigenen Debug Shell ausgestattet.
     * main.cpp: Globale Funktionen und setup/loop
     * config.cpp: Config laden über Preferences.h
     * shell.cpp: Shell für config, debug, alles eigentlich
-    * communication.cpp: UDP und TCP Comms
+    * communication.cpp: Alle Comms Zusammengeführt, Differenzierung zwischen WIFI und BLUETOOTH
+        * networkMgr.cpp: WiFi Comms
+        * bluetooth.cpp: Bluetooth Comms *WIP*
     * DisplayManager.cpp: Menüs, alles was auf dem Display angezeigt wird
-    * joystick.cpp: Steuerung; Joystick eingabe, Aktionsverarbeitung
+    * menuHandler.cpp: Steuerung; Joystick eingabe, Aktionsverarbeitung
     * global.h: Globale Variablen/Funktionen
+    * setupwizard.cpp: Setup Menü (WIFI/Bluetooth auswählen, Netzwerkprofil auswählen)

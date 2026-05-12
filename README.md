@@ -21,4 +21,4 @@ Außerdem ist die Fernbedienung mit einer eigenen Debug Shell ausgestattet.
     * setupwizard.cpp: Setup Menü (WIFI/Bluetooth auswählen, Netzwerkprofil auswählen)
 
 * Verkabelung:
-[Control Verkabelung](Control_Verkabelung.png)
+![Control Verkabelung](/Control_Verkabelung.png)

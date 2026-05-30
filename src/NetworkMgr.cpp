@@ -13,6 +13,8 @@ String SDATA = "";
 float battValue = 0;
 float lenkungValue = 0;
 float ampereValue = 0;
+unsigned int abstandVorne = 0;
+unsigned int abstandHinten = 0;
 
 
 bool NetworkMgr::begin() { // Verbindung herstellen
@@ -134,15 +136,21 @@ void NetworkMgr::handleIncomingTCP() { // Sensordaten vom Auto
         line.trim();
         if(line.startsWith("SDATA:")) {
             SDATA = line.substring(6);
-            if(SDATA.startsWith("BATT:")) {
-                battValue = line.substring(5).toFloat();
+            if(SDATA.startsWith("BATT")) {
+                battValue = SDATA.substring(5).toFloat();
                 logging.debug("Received BATT: " + String(battValue));
-            } else if (SDATA.startsWith("LENK:")) {
-                lenkungValue = line.substring(5).toFloat();
+            } else if (SDATA.startsWith("LENK")) {
+                lenkungValue = SDATA.substring(5).toFloat();
                 logging.debug("Received LENK: " + String(lenkungValue));
-            } else if (SDATA.startsWith("AMPR:")) {
-                ampereValue = line.substring(5).toFloat();
+            } else if (SDATA.startsWith("AMPR")) {
+                ampereValue = SDATA.substring(5).toFloat();
                 logging.debug("Received AMPR: " + String(ampereValue));
+            } else if (SDATA.startsWith("ABSV")) {
+                abstandVorne = SDATA.substring(5).toInt();
+                logging.debug("Received ABSV: " + String(abstandVorne));
+            } else if (SDATA.startsWith("ABSH")) {
+                abstandHinten = SDATA.substring(5).toInt();
+                logging.debug("Received ABSH: " + String(abstandHinten));
             } else {
                 logging.error("Received unknown SDATA: " + SDATA);
             }

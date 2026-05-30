@@ -13,6 +13,8 @@ extern bool advancedLog; // Loglevel boolean
 extern float battValue;
 extern float lenkungValue;
 extern float ampereValue;
+extern unsigned int abstandVorne;
+extern unsigned int abstandHinten;
 
 // Globale Variablen
 enum ConnectionType {

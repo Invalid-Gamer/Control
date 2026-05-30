@@ -9,6 +9,7 @@
 
 NetworkMgr::NetworkMgr() {}
 
+String SDATA = "";
 float battValue = 0;
 float lenkungValue = 0;
 
@@ -79,6 +80,9 @@ void NetworkMgr::_connectTCP() {
             return;
         }
     }
+    if(_tcp.connected()) {
+        delay(100);
+    }
 }
 
 void NetworkMgr::_checkTCP() {
@@ -127,12 +131,15 @@ void NetworkMgr::handleIncomingTCP() { // Sensordaten vom Auto
     while(_tcp.available()) {
         String line = _tcp.readStringUntil('\n');
         line.trim();
-        if(line.startsWith("BATT:")) {
-            battValue = line.substring(5).toFloat();
-            logging.debug("Received BATT: " + String(battValue));
-        } else if (line.startsWith("LENK:")) {
-            lenkungValue = line.substring(5).toFloat();
-            logging.debug("Received LENK: " + String(lenkungValue));
+        if(line.startsWith("SDATA:")) {
+            SDATA = line.substring(6);
+            if(line.startsWith("BATT:")) {
+                battValue = line.substring(5).toFloat();
+                logging.debug("Received BATT: " + String(battValue));
+            } else if (line.startsWith("LENK:")) {
+                lenkungValue = line.substring(5).toFloat();
+                logging.debug("Received LENK: " + String(lenkungValue));
+            }
         }
     }
 }

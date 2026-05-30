@@ -12,6 +12,7 @@ const int Bzr_Pin = 16; // Buzzer
 extern bool advancedLog; // Loglevel boolean
 extern float battValue;
 extern float lenkungValue;
+extern float ampereValue;
 
 // Globale Variablen
 enum ConnectionType {

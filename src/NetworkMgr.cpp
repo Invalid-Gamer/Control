@@ -12,6 +12,7 @@ NetworkMgr::NetworkMgr() {}
 String SDATA = "";
 float battValue = 0;
 float lenkungValue = 0;
+float ampereValue = 0;
 
 
 bool NetworkMgr::begin() { // Verbindung herstellen
@@ -133,12 +134,17 @@ void NetworkMgr::handleIncomingTCP() { // Sensordaten vom Auto
         line.trim();
         if(line.startsWith("SDATA:")) {
             SDATA = line.substring(6);
-            if(line.startsWith("BATT:")) {
+            if(SDATA.startsWith("BATT:")) {
                 battValue = line.substring(5).toFloat();
                 logging.debug("Received BATT: " + String(battValue));
-            } else if (line.startsWith("LENK:")) {
+            } else if (SDATA.startsWith("LENK:")) {
                 lenkungValue = line.substring(5).toFloat();
                 logging.debug("Received LENK: " + String(lenkungValue));
+            } else if (SDATA.startsWith("AMPR:")) {
+                ampereValue = line.substring(5).toFloat();
+                logging.debug("Received AMPR: " + String(ampereValue));
+            } else {
+                logging.error("Received unknown SDATA: " + SDATA);
             }
         }
     }

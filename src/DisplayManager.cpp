@@ -17,6 +17,17 @@ void initDisplay() {
     lcd.clear();
 }
 
+void InactivityHandler() {
+    if(millis() - lastInteraction > 10000) {
+        displayBacklightState = false;
+        lcd.noBacklight();
+        prevBacklightState = false;
+    } else if (prevBacklightState == false) {
+        lcd.backlight();
+        prevBacklightState = true;
+    }
+}
+
 void displayTitle() {
     lcd.setCursor(0, 0);
     lcd.print(mainMenuTitle);
@@ -103,16 +114,7 @@ void updateDisplay() { // Alle Menüs
                             changeBottomDisplay("Settings");
                             break;
                     }
-                    if(millis() - lastInteraction > 10000) {
-                        displayBacklightState = false;
-                        lcd.noBacklight();
-                        prevBacklightState = false;
-                    } else {
-                        if (prevBacklightState == false) {
-                            lcd.backlight();
-                            prevBacklightState = true;
-                        }
-                    }
+                    InactivityHandler();
                     break;
                 case MANUAL: {
                     displayMode("Manuell");

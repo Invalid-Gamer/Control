@@ -55,6 +55,7 @@ void joyStickMenu() { // Hauptmenü
 void joyStickMode() { // Joystick Optionen während aktiven Modi
     JoystickRaw currentPos = getRawJoystick();
     if(currentPos.btn) {
+        lastInteraction = millis();
         logging.debug("Button pressed (Exited Mode: " + String(currentCtrlMode) + ")");
         piep(2);
         currentCtrlMode = OFF;

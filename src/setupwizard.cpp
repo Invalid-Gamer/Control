@@ -28,6 +28,7 @@ ConnectionType credentialHandler(bool setMode) {
         }
         CustomMenu menu;
         menu.title = "Netzwerkprofile";
+        InactivityHandler();
         while (true) { 
             JoystickRaw currentPos = getRawJoystick();
             if(currentChoice != 3) {
@@ -37,6 +38,7 @@ ConnectionType credentialHandler(bool setMode) {
             }
             showCustomMenu(menu);
             if(currentPos.x > limit_right) {
+                lastInteraction = millis();
                 currentChoice += 1;
                 if (currentChoice == 4) {
                     currentChoice = 0;
@@ -44,6 +46,7 @@ ConnectionType credentialHandler(bool setMode) {
                 piep(1);
                 delay(menuWaitingDelay);
             } else if (currentPos.x < limit_left){
+                lastInteraction = millis();
                 if(currentChoice == 0) {
                     currentChoice = 3;
                 } else {
@@ -52,6 +55,7 @@ ConnectionType credentialHandler(bool setMode) {
                 piep(1);
                 delay(menuWaitingDelay);
             } else if (currentPos.btn) {
+                lastInteraction = millis();
                 if(currentChoice == 3) {
                     shell();
                 } else {

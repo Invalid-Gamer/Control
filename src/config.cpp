@@ -130,7 +130,7 @@ NetworkConfig getWiFiProfiles(bool checkIfExists) {
     conf.begin("config", true);
     if(!conf.isKey("ntwk_cfg") && checkIfExists) {
         logging.error("No Network config found! Please configure in WiFi Shell...");
-        currentShellMode = COMM;
+        currentShellMode = S_WIFI;
         shell();
     }
     if(!conf.isKey("ntwk_cfg") && checkIfExists) {

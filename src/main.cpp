@@ -79,6 +79,7 @@ void setup() {
   logging.info("Loading config");
   loadedConfig = loadConfig();
   if(!loadedConfig) {troubleshoot(loadConfig, false);}
+  lastInteraction = millis();
   // Credential Handler: BT/WIFI, Welches Netzwerkprofil?
   connectionType = credentialHandler(true);
   connectionEstablished = setupConnection();
@@ -87,7 +88,6 @@ void setup() {
   showStatus("Setup abgeschlossen");
   removeStatus(1);
   currentOpMode = REGULAR;
-  lastInteraction = millis();
 }
 
 void loop() {

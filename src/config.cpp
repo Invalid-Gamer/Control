@@ -22,7 +22,7 @@ void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle 
     Serial.println("device_name: " + conf.getString("device_name", ""));
     Serial.println("advancedLog: " + String(conf.getBool("advancedLog", false)));
     Serial.println("menu_delay: " + String(conf.getInt("menu_delay", 0)));
-    Serial.println("inactivity_timeout: " + String(conf.getInt("inactivity_timeout", 0)));
+    Serial.println("inac_timeout: " + String(conf.getInt("inactivity_timeout", 0)));
     conf.end();
 }
 
@@ -34,7 +34,7 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
     Device_Name = conf.getString("device_name", "");
     advancedLog = conf.getBool("advancedLog", false);
     menuWaitingDelay = conf.getInt("menu_delay", 0);
-    inactivityTimeout = conf.getInt("inactivity_timeout",0);
+    inactivityTimeout = conf.getInt("inac_timeout",0);
     conf.end();
     logging.debug("Loaded config. Current config: ");
     if(advancedLog){outputConfigToSerial();}

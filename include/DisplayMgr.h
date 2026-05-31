@@ -10,6 +10,7 @@ struct CustomMenu {
 };
 
 void initDisplay();
+void allSDATAValuesMenu(int page);
 void updateDisplay();
 void showStatus(String content);
 void removeStatus(int time);

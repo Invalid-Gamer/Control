@@ -78,7 +78,7 @@ void setup() {
   loadedConfig = loadConfig();
   if(!loadedConfig) {troubleshoot(loadConfig, false);}
   // Credential Handler: BT/WIFI, Welches Netzwerkprofil?
-  connectionType = credentialHandler();
+  connectionType = credentialHandler(true);
   connectionEstablished = setupConnection();
   if(!connectionEstablished){troubleshoot(setupConnection, false);}
   logging.info("Setup finished!");

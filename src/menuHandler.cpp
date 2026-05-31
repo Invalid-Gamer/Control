@@ -72,8 +72,8 @@ void joyStickMode() { // Joystick Optionen während aktiven Modi
             logging.debug("Mode left");
         } else if(currentPos.x < limit_left) {
             piep(1);
-            SDATAPage -=1;
-            if (SDATAPage = 0) {
+            SDATAPage -= 1;
+            if (SDATAPage == 0) {
                 SDATAPage = 4;
             }
             delay(menuWaitingDelay);

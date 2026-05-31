@@ -10,8 +10,12 @@ String WiFi_Pass = "";
 String Target_IP = "";
 
 ConnectionType credentialHandler(bool setMode) {
-    if (setMode && (connectionType == WIFI || connectionType == BLUETOOTH)){
-        if (connectionType != WIFI && connectionType != BLUETOOTH) {logging.error("Still no connectionType configured! Can't continue without!");}
+    ConnectionType resultConnType;
+    if (!setMode && (connectionType != WIFI && connectionType != BLUETOOTH)) {
+        logging.error("Still no connectionType configured! Can't continue without!"); 
+        setMode = true;
+    }
+    if (setMode){
         // Zukünftig (WIFI/BLUETOOTH), kann von Shell aus ausgeführt werden.
     }
     if(connectionType == WIFI) {
@@ -78,6 +82,12 @@ ConnectionType credentialHandler(bool setMode) {
         }
         logging.debug("Exiting Network shell");
         logging.debug(WiFi_SSID+" "+WiFi_Pass+" "+Target_IP);
-        return WIFI;
+        resultConnType = WIFI;
+    } else if (connectionType == BLUETOOTH) {
+        logging.error("Bluetooth nicht implementiert, fallback zu WIFI");
+        connectionType = WIFI;
+        credentialHandler(false);
+        return resultConnType;
     }
+    return resultConnType;
 }

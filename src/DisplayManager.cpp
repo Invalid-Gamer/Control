@@ -38,7 +38,7 @@ void displayTitle() {
 void displayMode(String title) {
     lcd.setCursor(0, 0);
     if(title.length() < 16) {
-        int add = 15 - title.length();
+        int add = 16 - title.length();
         for (int i = 0; i < add; i++) {
             title += " ";
         }

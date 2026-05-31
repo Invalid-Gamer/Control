@@ -354,7 +354,7 @@ void handleDebugCommands(String cmd) {
                             Serial.println("Enter packet value:");
                             String value = getSerialInput(true);
                             if(value != "ABORTCMD") {
-                                Serial.println("Sending: " + key + ":" + value);
+                                Serial.println("Sending: " + key + ":" + String(value));
                                 network.sendTCP(key,value);
                             } else {
                                 return;

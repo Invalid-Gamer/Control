@@ -18,7 +18,7 @@ void initDisplay() {
 }
 
 void InactivityHandler() {
-    if(millis() - lastInteraction > 10000) {
+    if(millis() - lastInteraction > inactivityTimeout) {
         displayBacklightState = false;
         lcd.noBacklight();
         prevBacklightState = false;

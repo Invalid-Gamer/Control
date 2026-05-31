@@ -17,6 +17,7 @@ extern unsigned int abstandVorne;
 extern unsigned int abstandHinten;
 extern bool displayBacklightState;
 extern unsigned long long lastInteraction;
+extern int inactivityTimeout;
 
 // Globale Variablen
 enum ConnectionType {

@@ -94,6 +94,8 @@ void NetworkMgr::_checkTCP() {
     }
     if(!_tcp.connected()) {
         currentCtrlMode = OFF;
+        showStatus("TCP Disconnected");
+        removeStatus(3);
     }
 }
 

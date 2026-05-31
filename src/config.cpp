@@ -22,7 +22,7 @@ void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle 
     Serial.println("device_name: " + conf.getString("device_name", ""));
     Serial.println("advancedLog: " + String(conf.getBool("advancedLog", false)));
     Serial.println("menu_delay: " + String(conf.getInt("menu_delay", 0)));
-    Serial.println("inac_timeout: " + String(conf.getInt("inactivity_timeout", 0)));
+    Serial.println("inac_timeout: " + String(conf.getInt("inac_timeout", 0)));
     conf.end();
 }
 
@@ -61,74 +61,82 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
 }
 
 bool writeConfig(String key, String value, bool ignoreExistance) { // Prüfen ob key existiert, ob value String ist, dann in die Config schreiben.
+    bool success;
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==8 || ignoreExistance) {
             logging.info("Changing config at: \nkey: " + key + "; value: "+ value);
             conf.putString(key.c_str(),value);
-            return true;
+            success = true;
         } else {
             logging.error("Failed changing config: Provided value isn't String");
-            return false;
+            success = false;
         }
     } else{
         logging.error("Failed changing config: Provided key does not exist!");
-        return false;
+        success = false;
     }
     conf.end();
     outputConfigToSerial();
+    return success;
 }
 
 bool writeConfig(String key, int value, bool ignoreExistance) { // Prüfen ob key existiert, ob value int ist, dann in die Config schreiben.
+    bool success;
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==4 || ignoreExistance) {
             logging.info("Changing config at: \nkey: " + key + "; value: "+ String(value));
             conf.putInt(key.c_str(),value);
-            return true;
+            success = true;
         } else {
             logging.error("Failed changing config: Provided value isn't int");
-            return false;
+            success = false;
         }
     } else {
         logging.error("Failed changing config: Provided key does not exist!");
-        return false;
+        success = false;
     }
     conf.end();
     outputConfigToSerial();
+    return success;
 }
 
 bool writeConfig(String key, bool value, bool ignoreExistance) {
+    bool success;
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==1 || ignoreExistance) {
             logging.info("Changing config at: \nkey: " + key + "; value: "+ String(value));
             conf.putBool(key.c_str(), value);
-            return true;
+            success = true;
         } else {
             logging.error("Failed changing config: Provided value isn't bool");
-            return false;
+            success = false;
         }
     } else {
         logging.error("Failed changing config: Provided key does not exist!");
-        return false;
+        success = false;
     }
     conf.end();
     outputConfigToSerial();
+    return success;
 }
 
 bool deleteConfig(String key, bool secure) {
+    bool success;
     conf.begin("config", false);
     Serial.println("FINAL CONFIRMATION: WILL BREAK CODE; DONT DO IF NOT DEV (y/n): ");
     String final_confirmation = getSerialInput(true);
     if (final_confirmation == "y") {
         conf.remove(key.c_str());
-        return true;
+        success = true;
     } else {
         Serial.println("Aborting...");
-        return false;
+        success = false;
     }
     conf.end();
+    return success;
 }
 
 NetworkConfig getWiFiProfiles(bool checkIfExists) {

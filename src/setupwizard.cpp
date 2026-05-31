@@ -32,8 +32,8 @@ ConnectionType credentialHandler(bool setMode) {
         }
         CustomMenu menu;
         menu.title = "Netzwerkprofile";
-        InactivityHandler();
         while (true) { 
+            InactivityHandler();
             JoystickRaw currentPos = getRawJoystick();
             if(currentChoice != 3) {
                 menu.value = Profiles[currentChoice];

@@ -123,7 +123,7 @@ void NetworkMgr::sendUDP(ControlPacket packet) {
 
 void NetworkMgr::sendUDP(String value) {
     _udp.beginPacket(Target_IP.c_str(),udp_Target_Port);
-    _udp.write((uint8_t*)&value, sizeof(value));
+    _udp.write((const uint8_t*)value.c_str(), value.length());
     _udp.endPacket();
 }
 void NetworkMgr::sendMovement(JoystickRaw raw) {

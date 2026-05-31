@@ -11,7 +11,7 @@ String Target_IP = "";
 
 ConnectionType credentialHandler(bool setMode) {
     if (setMode && (connectionType == WIFI || connectionType == BLUETOOTH)){
-        if (!setMode) {logging.error("Still no connectionType configured! Can't continue without!");}
+        if (connectionType != WIFI && connectionType != BLUETOOTH) {logging.error("Still no connectionType configured! Can't continue without!");}
         // Zukünftig (WIFI/BLUETOOTH), kann von Shell aus ausgeführt werden.
     }
     if(connectionType == WIFI) {

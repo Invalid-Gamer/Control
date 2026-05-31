@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include <joystick.h>
-extern unsigned long lastUdp;
 
 struct ControlPacket {// Für wie die Datensätze aufgebaut sein sollten habe ich KI benutzt.
     uint16_t x;

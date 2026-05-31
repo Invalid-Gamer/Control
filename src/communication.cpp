@@ -14,7 +14,7 @@ bool setupConnection() { // Verbindung herstellen
     if(connectionType == WIFI) {
         showStatus("Verbinde WLAN... ");
         success = network.begin();
-        if(success) showStatus("WLAN Verbunden"); removeStatus(1);
+        if(success){showStatus("WLAN Verbunden");removeStatus(1);}
     } else if (connectionType == BLUETOOTH) {
         showStatus("Bluetooth existiert nicht");
         connectionType = WIFI;

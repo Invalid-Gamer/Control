@@ -54,7 +54,7 @@ extern MenuOption currentMenuOption;
 
 // Globale Funktionen
 void piep(int amount);
-void troubleshoot(void (*callback()), bool doContinue);
-void troubleshoot(bool (*callback()), bool doContinue);
+void troubleshoot(void (*callback)(), bool doContinue);
+void troubleshoot(bool (*callback)(), bool doContinue);
 
 #endif

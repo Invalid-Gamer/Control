@@ -11,6 +11,7 @@ const String debugShellVer = "V0.2";
 
 void shell();
 void serialHandler();
+String getSerialInput(bool timeout);
 
 enum ShellMode {
     BASE,

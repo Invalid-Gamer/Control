@@ -4,7 +4,7 @@
 #include <DisplayMgr.h>
 
 const String mainMenuTitle = "Fernsteuerung   "; // Immer bis 16 Zeichen auffüllen!
-int stayUntil;
+unsigned long stayUntil;
 bool statusDisplaying = false;
 bool prevBacklightState = true;
 
@@ -25,6 +25,7 @@ void InactivityHandler() {
     } else if (prevBacklightState == false) {
         lcd.backlight();
         prevBacklightState = true;
+        displayBacklightState = true;
     }
 }
 

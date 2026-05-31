@@ -47,10 +47,12 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
         if(Device_Name == "") {
             Device_Name = "Natasha Control";
             logging.error("Kein Device Name vorhanden! (Oder leer) Benutze Standard (Natasha Control)");
-        } else if(menuWaitingDelay == 0) {
+        }
+        if(menuWaitingDelay == 0) {
             menuWaitingDelay = 25;
             logging.error("Kein Menu Waiting Delay Wert festgelegt! Benutze Standard von 25...");
-        } else if(inactivityTimeout == 0) {
+        } 
+        if(inactivityTimeout == 0) {
             inactivityTimeout = 10000;
             logging.error("Kein Inactivity Timeout Wert festgelegt! Benutze Standard von 10000...");
         }

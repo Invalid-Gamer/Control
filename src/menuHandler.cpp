@@ -18,6 +18,7 @@ JoystickRaw getRawJoystick() { // Globale FUnktion für Joystick auslesen
 void joyStickMenu() { // Hauptmenü
     JoystickRaw currentPos = getRawJoystick();
     if(currentPos.x > limit_right) {
+        lastInteraction = millis();
         if(currentMenuOption == M_SETTINGS) {
             currentMenuOption = M_MANUAL;
         } else {
@@ -27,6 +28,7 @@ void joyStickMenu() { // Hauptmenü
         delay(menuWaitingDelay);
         logging.debug("Menu right (Now selected: " + String(currentMenuOption) + ")");
     } else if(currentPos.x < limit_left) {
+        lastInteraction = millis();
         if(currentMenuOption == M_MANUAL) {
             currentMenuOption = M_SETTINGS;
         } else {
@@ -37,6 +39,7 @@ void joyStickMenu() { // Hauptmenü
         logging.debug("Menu left (Now selected: " + String(currentMenuOption) + ")");
     } else if (currentPos.btn) {
         piep(2);
+        lastInteraction = millis();
         switch (currentMenuOption) {
             case M_MANUAL: currentCtrlMode = MANUAL; break;
             case M_HAUTO: currentCtrlMode = HAUTO; break;

@@ -6,6 +6,7 @@
 const String mainMenuTitle = "Fernsteuerung   "; // Immer bis 16 Zeichen auffüllen!
 int stayUntil;
 bool statusDisplaying = false;
+bool prevBacklightState = true;
 
 // LCD Config
 LiquidCrystal_I2C lcd(0x27, 16, 2); // I2C Addresse, 16x2 Characters Init.
@@ -101,6 +102,16 @@ void updateDisplay() { // Alle Menüs
                         case M_SETTINGS:
                             changeBottomDisplay("Settings");
                             break;
+                    }
+                    if(millis() - lastInteraction > 10000) {
+                        displayBacklightState = false;
+                        lcd.noBacklight();
+                        prevBacklightState = false;
+                    } else {
+                        if (prevBacklightState == false) {
+                            lcd.backlight();
+                            prevBacklightState = true;
+                        }
                     }
                     break;
                 case MANUAL: {

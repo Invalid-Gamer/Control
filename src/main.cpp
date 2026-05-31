@@ -22,6 +22,8 @@ MenuOption currentMenuOption = M_MANUAL; // Hauptmenü
 // Variablen
 bool loadedConfig;
 bool connectionEstablished;
+bool displayBacklightState = true;
+unsigned long long lastInteraction;
 
 void troubleshoot(void (*callback)(), bool doContinue) {
   Serial.println("Encountered an Error!");
@@ -85,6 +87,7 @@ void setup() {
   showStatus("Setup abgeschlossen");
   removeStatus(1);
   currentOpMode = REGULAR;
+  lastInteraction = millis();
 }
 
 void loop() {

@@ -38,13 +38,22 @@ String getSerialInput(bool timeout) {
 // BASE Shell 
 void handleBaseCommands(String cmd) {
     if (cmd == "help"){
-        Serial.println("Help:\nconfig - Configmanagement\nwifi - WiFi-Management\ndisplay - Display Management\nsetCtrlMode - change Control Mode\ndebug - Debug tool for Network, Joystick, etc.\nping - Ping\nreload - Restart the Remote\nexit - Exit shell or subprocess");
+        Serial.println("Help:\nconfig - Configmanagement\nwifi - WiFi-Management\nbluetooth - Bluetooth Management\ndisplay - Display Management\nsetCtrlMode - change Control Mode\nsetConnMode - Change Connection Mode\ndebug - Debug tool for Network, Joystick, etc.\nping - Ping\nreload - Restart the Remote\nexit - Exit shell or subprocess");
     } else if(cmd == "config") {
         currentShellMode = CONFIG;
         Serial.println("Config Shell " + configShellVer);
     } else if (cmd == "wifi") {
-        currentShellMode = COMM;
+        currentShellMode = S_WIFI;
         Serial.println("WIFI Shell " + WiFiShellVer);
+        if(connectionType == BLUETOOTH) {
+            Serial.println("Warning! Device is in Bluetooth Mode. Change Connection Mode in Base Shell using setConnMode");
+        }
+    } else if(cmd == "bluetooth") {
+        currentShellMode = S_BLUETOOTH;
+        Serial.println("Bluetooth Shell " + BluetoothShellVer);
+        if(connectionType == WIFI) {
+            Serial.println("Warning! Device is in WiFi Mode. Change Connection Mode in Base Shell using setConnMode");
+        }
     } else if(cmd == "display") {
         currentShellMode = SCREEN;
         Serial.println("Display Shell "+ displayShellVer);
@@ -65,6 +74,20 @@ void handleBaseCommands(String cmd) {
                 return;
             }
             Serial.println("Control Mode succesfully set to " + set);
+        }
+    } else if (cmd == "setConnMode") {
+        Serial.println("Connection Mode Choose: WIFI/BLUETOOTH :");
+        String set = getSerialInput(true);
+        if(set != "ABORTCMD") {
+            if(set == "WIFI") {
+                connectionType = WIFI;
+                Serial.println("Please select Connection Profile on screen!");
+                credentialHandler(false);
+            } else if(set == "BLUETOOTH") {
+                connectionType = BLUETOOTH;
+                Serial.println("Please select Connection Profile on screen!");
+                credentialHandler(false);
+            }
         }
     } else if (cmd == "debug") {
         currentShellMode = DEBUG;
@@ -187,10 +210,10 @@ void handleConfigCommands(String cmd) {
 }
 
 //--------------------------------
-//--------------COMM--------------
+//--------------WIFI--------------
 //--------------------------------
 
-// Communication Shell
+// WiFi Shell
 void handleWiFiCommands(String cmd) {
     if(cmd == "help") {
         Serial.println("WiFi Shell Help:\nprofiles - Manage WiFi Profiles\nstatus - WiFi Status\nconnect - Connect with WiFi\ndisconnect - Disconnect WiFi\ngetMacAddr - Returns MAC Address\nexit - Return to Standard-Shell");
@@ -223,6 +246,22 @@ void handleWiFiCommands(String cmd) {
         currentShellMode = BASE;
     } else {
         Serial.println("Commmand not found: " + cmd);
+    }
+}
+
+//-----------------------------------
+//-------------BLUETOOTH-------------
+//-----------------------------------
+
+// Bluetooth Shell
+void handleBluetoothCommands(String cmd) {
+    if(cmd == "help") {
+        Serial.println("Bluetooth Shell Help:\n---Bluetooth Functionality isn't set up yet!\nexit - Return to Standard-Shell");
+    } else if(cmd == "exit") {
+        Serial.println("Resuming to normal shell");
+        currentShellMode = BASE;
+    } else {
+        Serial.println("Command not found: " + cmd);
     }
 }
 
@@ -315,7 +354,7 @@ void handleDebugCommands(String cmd) {
                             Serial.println("Enter packet value:");
                             String value = getSerialInput(true);
                             if(value != "ABORTCMD") {
-                                Serial.println("Sending: " + key + ":" + value);
+                                Serial.println("Sending: " + key + ":" + String(value));
                                 network.sendTCP(key,value);
                             } else {
                                 return;
@@ -407,8 +446,10 @@ void printShellChar() {
         Serial.print("$ ");
     } else if(currentShellMode == CONFIG) {
         Serial.print("Config $ ");
-    } else if(currentShellMode == COMM) {
+    } else if(currentShellMode == S_WIFI) {
         Serial.print("WiFi $ ");
+    } else if(currentShellMode == S_BLUETOOTH) {
+        Serial.print("Bluetooth $ ");
     } else if(currentShellMode == SCREEN) {
         Serial.print("Display $ ");
     } else if(currentShellMode == DEBUG) {
@@ -431,8 +472,10 @@ void shell() {
             handleBaseCommands(shellInput);
         } else if(currentShellMode == CONFIG) {
             handleConfigCommands(shellInput);
-        } else if(currentShellMode == COMM) {
+        } else if(currentShellMode == S_WIFI) {
             handleWiFiCommands(shellInput);
+        } else if(currentShellMode == S_BLUETOOTH) {
+            
         } else if(currentShellMode == SCREEN) {
             handleDisplayCommands(shellInput);
         } else if(currentShellMode == DEBUG) {

@@ -3,18 +3,21 @@
 #include <Arduino.h>
 
 const String baseShellVer = "V1.0";
-const String configShellVer = "V0.4";
-const String WiFiShellVer = "V0.2";
-const String displayShellVer = "V0.1.1";
-const String debugShellVer = "V0.2";
+const String configShellVer = "V1.0";
+const String WiFiShellVer = "V1.0";
+const String BluetoothShellVer = "V0.0";
+const String displayShellVer = "V1.0";
+const String debugShellVer = "V1.0";
 
 void shell();
 void serialHandler();
+String getSerialInput(bool timeout);
 
 enum ShellMode {
     BASE,
     CONFIG,
-    COMM,
+    S_WIFI,
+    S_BLUETOOTH,
     SCREEN,
     DEBUG
 };

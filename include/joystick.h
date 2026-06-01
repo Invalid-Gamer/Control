@@ -16,6 +16,6 @@ struct JoystickRaw {
 JoystickRaw getRawJoystick();
 void joyStickMenu();
 void joyStickMode();
-ConnectionType credentialHandler();
+ConnectionType credentialHandler(bool setMode);
 
 #endif

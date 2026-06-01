@@ -4,8 +4,9 @@
 #include <DisplayMgr.h>
 
 const String mainMenuTitle = "Fernsteuerung   "; // Immer bis 16 Zeichen auffüllen!
-int stayUntil;
+unsigned long stayUntil;
 bool statusDisplaying = false;
+bool prevBacklightState = true;
 
 // LCD Config
 LiquidCrystal_I2C lcd(0x27, 16, 2); // I2C Addresse, 16x2 Characters Init.
@@ -14,6 +15,18 @@ void initDisplay() {
     lcd.init();
     lcd.backlight();
     lcd.clear();
+}
+
+void InactivityHandler() {
+    if(millis() - lastInteraction > inactivityTimeout) {
+        displayBacklightState = false;
+        lcd.noBacklight();
+        prevBacklightState = false;
+    } else if (prevBacklightState == false) {
+        lcd.backlight();
+        prevBacklightState = true;
+        displayBacklightState = true;
+    }
 }
 
 void displayTitle() {
@@ -25,7 +38,7 @@ void displayTitle() {
 void displayMode(String title) {
     lcd.setCursor(0, 0);
     if(title.length() < 16) {
-        int add = 15 - title.length();
+        int add = 16 - title.length();
         for (int i = 0; i < add; i++) {
             title += " ";
         }
@@ -44,6 +57,26 @@ void changeBottomDisplay(String content) {
     }
     content = content.substring(0, 16);
     lcd.print(content);
+}
+
+void allSDATAValuesMenu(int page) { // Ja, ist nicht so schön aber ich hab Zeitstress
+    String bottomContent = "";
+    switch(page) {
+        case 1: {
+            bottomContent = "Bat:" + String(battValue) + "V; " + String(ampereValue) + "A";
+            break;
+        } case 2: {
+            bottomContent = "Lenkung: " + String(lenkungValue);
+            break;
+        } case 3: {
+            bottomContent = "Abstand V: " + String(abstandVorne);
+            break;
+        } case 4: {
+            bottomContent = "Abstand H: " + String(abstandHinten);
+            break;
+        }
+    }
+    changeBottomDisplay(bottomContent);
 }
 
 void updateDisplay() { // Alle Menüs
@@ -82,6 +115,7 @@ void updateDisplay() { // Alle Menüs
                             changeBottomDisplay("Settings");
                             break;
                     }
+                    InactivityHandler();
                     break;
                 case MANUAL: {
                     displayMode("Manuell");
@@ -97,14 +131,10 @@ void updateDisplay() { // Alle Menüs
                 }
                 case AUTO: {
                     displayMode("Automatik"); 
-                    String bottomContent = "Bat:" + String(battValue) + "V L:" + String(lenkungValue);
-                    changeBottomDisplay(bottomContent);
                     break;
                 }
                 case INFO: {
                     displayMode("Informationen");
-                    String bottomContent = "Bat:" + String(battValue) + "V L:" + String(lenkungValue);
-                    changeBottomDisplay(bottomContent);
                     break;
                 }
             }

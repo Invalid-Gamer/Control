@@ -3,6 +3,9 @@
 #include <joystick.h>
 #include <communication.h>
 #include <config.h>
+#include <DisplayMgr.h>
+
+int SDATAPage = 1;
 
 JoystickRaw getRawJoystick() { // Globale FUnktion für Joystick auslesen
     JoystickRaw data;
@@ -15,6 +18,7 @@ JoystickRaw getRawJoystick() { // Globale FUnktion für Joystick auslesen
 void joyStickMenu() { // Hauptmenü
     JoystickRaw currentPos = getRawJoystick();
     if(currentPos.x > limit_right) {
+        lastInteraction = millis();
         if(currentMenuOption == M_SETTINGS) {
             currentMenuOption = M_MANUAL;
         } else {
@@ -24,6 +28,7 @@ void joyStickMenu() { // Hauptmenü
         delay(menuWaitingDelay);
         logging.debug("Menu right (Now selected: " + String(currentMenuOption) + ")");
     } else if(currentPos.x < limit_left) {
+        lastInteraction = millis();
         if(currentMenuOption == M_MANUAL) {
             currentMenuOption = M_SETTINGS;
         } else {
@@ -34,11 +39,12 @@ void joyStickMenu() { // Hauptmenü
         logging.debug("Menu left (Now selected: " + String(currentMenuOption) + ")");
     } else if (currentPos.btn) {
         piep(2);
+        lastInteraction = millis();
         switch (currentMenuOption) {
             case M_MANUAL: currentCtrlMode = MANUAL; break;
             case M_HAUTO: currentCtrlMode = HAUTO; break;
-            case M_AUTO: currentCtrlMode = AUTO; break;
-            case M_INFO: currentCtrlMode = INFO; break;
+            case M_AUTO: currentCtrlMode = AUTO; SDATAPage = 1; break;
+            case M_INFO: currentCtrlMode = INFO; SDATAPage = 1; break;
             case M_SETTINGS: break;
         }
         updateMode();
@@ -49,6 +55,7 @@ void joyStickMenu() { // Hauptmenü
 void joyStickMode() { // Joystick Optionen während aktiven Modi
     JoystickRaw currentPos = getRawJoystick();
     if(currentPos.btn) {
+        lastInteraction = millis();
         logging.debug("Button pressed (Exited Mode: " + String(currentCtrlMode) + ")");
         piep(2);
         currentCtrlMode = OFF;
@@ -57,12 +64,21 @@ void joyStickMode() { // Joystick Optionen während aktiven Modi
     if(currentCtrlMode == AUTO || currentCtrlMode == INFO) {
         if(currentPos.x > limit_right) {
             piep(1);
+            SDATAPage += 1;
+            if (SDATAPage > 4) {
+                SDATAPage = 1;
+            }
             delay(menuWaitingDelay);
             logging.debug("Mode left");
         } else if(currentPos.x < limit_left) {
             piep(1);
+            SDATAPage -= 1;
+            if (SDATAPage == 0) {
+                SDATAPage = 4;
+            }
             delay(menuWaitingDelay);
             logging.debug("Mode right");
         }
+        allSDATAValuesMenu(SDATAPage);
     }
 }

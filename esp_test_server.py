@@ -115,17 +115,29 @@ def sender_thread():
                 # Beispiel: Abwechselnd Batterie und Lenkung senden
                 batt = round(random.uniform(3.5, 4.2), 2)
                 lenk = round(random.uniform(0.0, 2.4), 2)
-                
+                ampere = round(random.uniform(0.1, 2.0), 2)
+                abstandHinten = random.randint(100,20000)
+                abstandVorne = random.randint(100,20000)
+
                 # Formatierung gemäß C++: startsWith("BATT:") und readStringUntil('\n')
-                msg_batt = f"BATT:{batt}\n"
+                msg_batt = f"SDATA:BATT:{batt}\n"
                 active_tcp_conn.sendall(msg_batt.encode())
                 
-                time.sleep(0.1) # Kurze Pause zwischen Paketen
+                #time.sleep(0.1)
                 
-                msg_lenk = f"LENK:{lenk}\n"
+                msg_lenk = f"SDATA:LENK:{lenk}\n"
                 active_tcp_conn.sendall(msg_lenk.encode())
                 
-                data_display["tcp_last_msg_sent"] = f"B:{batt}V, L:{lenk}"
+                msg_amp = f"SDATA:AMPR:{ampere}\n"
+                active_tcp_conn.sendall(msg_amp.encode())
+
+                msg_absH = f"SDATA:ABSH:{abstandHinten}\n"
+                active_tcp_conn.sendall(msg_absH.encode())
+
+                msg_absV = f"SDATA:ABSV:{abstandVorne}\n"
+                active_tcp_conn.sendall(msg_absV.encode())
+
+                data_display["tcp_last_msg_sent"] = f"B:{batt}V, L:{lenk}, A:{ampere}, AH:{abstandHinten}, AV:{abstandVorne}"
             except:
                 active_tcp_conn = None
         time.sleep(0.5)

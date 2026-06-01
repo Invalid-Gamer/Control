@@ -8,7 +8,7 @@ BT::BT() {}
 BluetoothSerial SerialBT;
 
 bool BT::begin() {
-    SerialBT.begin("Natascha Control", true);
+    SerialBT.begin(Device_Name, true);
 
     bool connected = SerialBT.connect(bt_address);
 

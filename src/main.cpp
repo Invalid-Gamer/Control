@@ -22,6 +22,8 @@ MenuOption currentMenuOption = M_MANUAL; // Hauptmenü
 // Variablen
 bool loadedConfig;
 bool connectionEstablished;
+bool displayBacklightState = true;
+unsigned long long lastInteraction;
 
 void troubleshoot(void (*callback)(), bool doContinue) {
   Serial.println("Encountered an Error!");
@@ -77,8 +79,9 @@ void setup() {
   logging.info("Loading config");
   loadedConfig = loadConfig();
   if(!loadedConfig) {troubleshoot(loadConfig, false);}
+  lastInteraction = millis();
   // Credential Handler: BT/WIFI, Welches Netzwerkprofil?
-  connectionType = credentialHandler();
+  connectionType = credentialHandler(true);
   connectionEstablished = setupConnection();
   if(!connectionEstablished){troubleshoot(setupConnection, false);}
   logging.info("Setup finished!");

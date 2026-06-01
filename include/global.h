@@ -12,6 +12,12 @@ const int Bzr_Pin = 16; // Buzzer
 extern bool advancedLog; // Loglevel boolean
 extern float battValue;
 extern float lenkungValue;
+extern float ampereValue;
+extern unsigned int abstandVorne;
+extern unsigned int abstandHinten;
+extern bool displayBacklightState;
+extern unsigned long long lastInteraction;
+extern int inactivityTimeout;
 
 // Globale Variablen
 enum ConnectionType {
@@ -48,7 +54,7 @@ extern MenuOption currentMenuOption;
 
 // Globale Funktionen
 void piep(int amount);
-void troubleshoot(void (*callback()), bool doContinue);
-void troubleshoot(bool (*callback()), bool doContinue);
+void troubleshoot(void (*callback)(), bool doContinue);
+void troubleshoot(bool (*callback)(), bool doContinue);
 
 #endif

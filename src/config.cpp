@@ -11,6 +11,7 @@ int tcp_Target_Port = 0;
 String Device_Name = "";
 bool advancedLog = false;
 int menuWaitingDelay = 0;
+int inactivityTimeout = 0;
 uint8_t bt_address[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle Konsole
@@ -21,6 +22,7 @@ void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle 
     Serial.println("device_name: " + conf.getString("device_name", ""));
     Serial.println("advancedLog: " + String(conf.getBool("advancedLog", false)));
     Serial.println("menu_delay: " + String(conf.getInt("menu_delay", 0)));
+    Serial.println("inac_timeout: " + String(conf.getInt("inac_timeout", 0)));
     conf.end();
 }
 
@@ -32,6 +34,7 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
     Device_Name = conf.getString("device_name", "");
     advancedLog = conf.getBool("advancedLog", false);
     menuWaitingDelay = conf.getInt("menu_delay", 0);
+    inactivityTimeout = conf.getInt("inac_timeout",0);
     conf.end();
     logging.debug("Loaded config. Current config: ");
     if(advancedLog){outputConfigToSerial();}
@@ -39,14 +42,19 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
         // Debug, Warnen dass kein Target vorhanden, Programm stoppen, auf Display anzeigen.
         logging.error("Target Port nicht vorhanden!");
         return false;
-    } else if (Device_Name == "" || menuWaitingDelay == 0) {
+    } else if (Device_Name == "" || menuWaitingDelay == 0 || inactivityTimeout == 0) {
         // Auf Display warnen, fortfahren mit Standard-Namen
         if(Device_Name == "") {
             Device_Name = "Natasha Control";
             logging.error("Kein Device Name vorhanden! (Oder leer) Benutze Standard (Natasha Control)");
-        } else if(menuWaitingDelay == 0) {
+        }
+        if(menuWaitingDelay == 0) {
             menuWaitingDelay = 25;
             logging.error("Kein Menu Waiting Delay Wert festgelegt! Benutze Standard von 25...");
+        } 
+        if(inactivityTimeout == 0) {
+            inactivityTimeout = 10000;
+            logging.error("Kein Inactivity Timeout Wert festgelegt! Benutze Standard von 10000...");
         }
         return true;
     } else {
@@ -55,74 +63,82 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
 }
 
 bool writeConfig(String key, String value, bool ignoreExistance) { // Prüfen ob key existiert, ob value String ist, dann in die Config schreiben.
+    bool success;
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==8 || ignoreExistance) {
             logging.info("Changing config at: \nkey: " + key + "; value: "+ value);
             conf.putString(key.c_str(),value);
-            return true;
+            success = true;
         } else {
             logging.error("Failed changing config: Provided value isn't String");
-            return false;
+            success = false;
         }
     } else{
         logging.error("Failed changing config: Provided key does not exist!");
-        return false;
+        success = false;
     }
     conf.end();
     outputConfigToSerial();
+    return success;
 }
 
 bool writeConfig(String key, int value, bool ignoreExistance) { // Prüfen ob key existiert, ob value int ist, dann in die Config schreiben.
+    bool success;
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==4 || ignoreExistance) {
             logging.info("Changing config at: \nkey: " + key + "; value: "+ String(value));
             conf.putInt(key.c_str(),value);
-            return true;
+            success = true;
         } else {
             logging.error("Failed changing config: Provided value isn't int");
-            return false;
+            success = false;
         }
     } else {
         logging.error("Failed changing config: Provided key does not exist!");
-        return false;
+        success = false;
     }
     conf.end();
     outputConfigToSerial();
+    return success;
 }
 
 bool writeConfig(String key, bool value, bool ignoreExistance) {
+    bool success;
     conf.begin("config", false);
     if(conf.isKey(key.c_str()) || ignoreExistance) {
         if(conf.getType(key.c_str())==1 || ignoreExistance) {
             logging.info("Changing config at: \nkey: " + key + "; value: "+ String(value));
             conf.putBool(key.c_str(), value);
-            return true;
+            success = true;
         } else {
             logging.error("Failed changing config: Provided value isn't bool");
-            return false;
+            success = false;
         }
     } else {
         logging.error("Failed changing config: Provided key does not exist!");
-        return false;
+        success = false;
     }
     conf.end();
     outputConfigToSerial();
+    return success;
 }
 
 bool deleteConfig(String key, bool secure) {
+    bool success;
     conf.begin("config", false);
     Serial.println("FINAL CONFIRMATION: WILL BREAK CODE; DONT DO IF NOT DEV (y/n): ");
     String final_confirmation = getSerialInput(true);
     if (final_confirmation == "y") {
         conf.remove(key.c_str());
-        return true;
+        success = true;
     } else {
         Serial.println("Aborting...");
-        return false;
+        success = false;
     }
     conf.end();
+    return success;
 }
 
 NetworkConfig getWiFiProfiles(bool checkIfExists) {
@@ -130,7 +146,7 @@ NetworkConfig getWiFiProfiles(bool checkIfExists) {
     conf.begin("config", true);
     if(!conf.isKey("ntwk_cfg") && checkIfExists) {
         logging.error("No Network config found! Please configure in WiFi Shell...");
-        currentShellMode = COMM;
+        currentShellMode = S_WIFI;
         shell();
     }
     if(!conf.isKey("ntwk_cfg") && checkIfExists) {

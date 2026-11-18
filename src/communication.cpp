@@ -41,7 +41,9 @@ void updateMode() { // Mode an Auto senden
 
 void sendHupe() {
     if(connectionType == WIFI) {
-        network.sendTCP("hupe", 2);
+        if(enableHorn) {
+            network.sendTCP("hupe", 2);
+        }
     } else if(connectionType == BLUETOOTH) {
         piep(1);
     }

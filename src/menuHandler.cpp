@@ -45,7 +45,7 @@ void joyStickMenu() { // Hauptmenü
             case M_HAUTO: currentCtrlMode = HAUTO; break;
             case M_AUTO: currentCtrlMode = AUTO; SDATAPage = 1; break;
             case M_INFO: currentCtrlMode = INFO; SDATAPage = 1; break;
-            case M_SETTINGS: sendHupe(); break;
+            case M_SETTINGS: if (enableHorn) { sendHupe(); } break;
         }
         InactivityHandler();
         updateMode();

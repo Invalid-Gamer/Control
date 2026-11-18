@@ -12,6 +12,7 @@ String Device_Name = "";
 bool advancedLog = false;
 int menuWaitingDelay = 0;
 int inactivityTimeout = 0;
+bool enableHorn = false;
 uint8_t bt_address[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle Konsole
@@ -23,6 +24,7 @@ void outputConfigToSerial() { // Alle Config Einträge ausgeben an die serielle 
     Serial.println("advancedLog: " + String(conf.getBool("advancedLog", false)));
     Serial.println("menu_delay: " + String(conf.getInt("menu_delay", 0)));
     Serial.println("inac_timeout: " + String(conf.getInt("inac_timeout", 0)));
+    Serial.println("enable_horn:" + String(conf.getBool("enable_horn", false)));
     conf.end();
 }
 
@@ -35,6 +37,7 @@ bool loadConfig() { // Config über Preferences laden mit debug, true = Erfolg, 
     advancedLog = conf.getBool("advancedLog", false);
     menuWaitingDelay = conf.getInt("menu_delay", 0);
     inactivityTimeout = conf.getInt("inac_timeout",0);
+    enableHorn = conf.getBool("enable_horn", false);
     conf.end();
     logging.debug("Loaded config. Current config: ");
     if(advancedLog){outputConfigToSerial();}

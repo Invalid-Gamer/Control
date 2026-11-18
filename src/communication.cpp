@@ -39,6 +39,14 @@ void updateMode() { // Mode an Auto senden
     }
 }
 
+void sendHupe() {
+    if(connectionType == WIFI) {
+        network.sendTCP("hupe", 2);
+    } else if(connectionType == BLUETOOTH) {
+        piep(1);
+    }
+}
+
 String getConnectionStatus() { // Detaillierter Verbindungsstatus im String
     String answer;
     if(connectionType == WIFI) {
